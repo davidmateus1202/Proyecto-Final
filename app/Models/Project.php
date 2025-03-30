@@ -21,4 +21,14 @@ class Project extends Model
     {
         return $this->belongsToMany(User::class, 'user_projects');
     }
+
+    /**
+     * Get single abscisa in progress
+     */
+    public function abscisaInProgress()
+    {
+        return $this->hasOne(Abscisa::class)
+            ->where('status', 'in_progress')
+            ->with('slabs');
+    }
 }
