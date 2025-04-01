@@ -50,7 +50,8 @@ class ModelController extends Controller
 
             return response()->json([
                 'message' => 'Modelo IA',
-                'data' => $response->json()
+                'data' => $response->json(),
+                'image' => $url_image
             ], 200);
 
         } catch (\Exception $e) {
@@ -80,3 +81,4 @@ class ModelController extends Controller
         return $url;
     }
 }
+

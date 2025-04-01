@@ -32,6 +32,9 @@ Route::prefix('slab')->middleware('auth:sanctum')->group(function () {
 Route::prefix('pathologie')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [PathologiesController::class, 'index']);
     Route::post('/create', [PathologiesController::class, 'create']);
+    Route::get('/show/concept', [PathologiesController::class, 'showConcept']);
 });
 
-Route::post('/create-concept', [PathologiesController::class, 'createNewPathologyConcept']);
+
+// Habilitar la ruta para crear conceptos técnicos de patologías
+// Route::post('/create-concept', [PathologiesController::class, 'createNewPathologyConcept']);
