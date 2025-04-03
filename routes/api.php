@@ -7,7 +7,9 @@ use App\Http\Controllers\AbscisaController;
 use App\Http\Controllers\SlabsController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\PathologiesController;
+use App\Http\Controllers\Web\WebController;
 
+///// -- API ROUTES FOR MOBIL -- /////
 Route::post('login', [AuthController::class, 'login']);
 Route::post('refresh-token', [AuthController::class, 'refreshToken'])->middleware('auth:sanctum');
 Route::post('model', [ModelController::class, 'ia_model'])->middleware('auth:sanctum');
@@ -38,3 +40,9 @@ Route::prefix('pathologie')->middleware('auth:sanctum')->group(function () {
 
 // Habilitar la ruta para crear conceptos técnicos de patologías
 // Route::post('/create-concept', [PathologiesController::class, 'createNewPathologyConcept']);
+
+///// -- API ROUTES FOR WEB -- /////
+Route::prefix('web')->middleware('auth:sanctum')->group(function () {
+    Route::get('/projects/index', [WebController::class, 'index']);
+    Route::post('/projects/show', [WebController::class, 'getDetails']);
+});

@@ -31,4 +31,13 @@ class Project extends Model
             ->where('status', 'in_progress')
             ->with('slabs');
     }
+
+    /**
+     * Get all abscisas by project id
+     */
+    public function abscisas()
+    {
+        return $this->hasMany(Abscisa::class)
+            ->with('slabsWithPathologies');
+    }
 }

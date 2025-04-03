@@ -13,4 +13,10 @@ class Abscisa extends Model
     {
         return $this->hasMany(Slabs::class, 'abscisa_id');
     }
+
+    public function slabsWithPathologies()
+    {
+        return $this->hasMany(Slabs::class, 'abscisa_id')
+            ->with('pathologies');
+    }
 }

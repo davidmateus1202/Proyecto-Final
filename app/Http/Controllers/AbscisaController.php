@@ -118,9 +118,6 @@ class AbscisaController extends Controller
                 400);
             };
 
-            $abscisa = Abscisa::where('project_id', $request->project_id)->get();
-
-
             return response()->json([
                 'success' => true,
                 'data' => Abscisa::where('project_id', $request->project_id)->with('slabs')->get()

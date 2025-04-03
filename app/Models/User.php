@@ -53,4 +53,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Project::class, 'user_projects');
     }
+
+    public function projectsFinished()
+    {
+        return $this->belongsToMany(Project::class, 'user_projects')
+            ->where('projects.status', 'finished');
+    }
 }

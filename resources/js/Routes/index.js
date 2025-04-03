@@ -5,7 +5,7 @@ import Home from '../Pages/Home.vue';
 import Welcome from '../Pages/Welcome.vue';
 import Login from '../Pages/Login.vue';
 import Error from '../Error/Error.vue';
-import Page1 from '../Pages/Page1.vue';
+import ProjectDetails from '../Pages/ProjectDetails.vue';
 
 const routes = [
     {
@@ -28,12 +28,6 @@ const routes = [
         component: Home,
         meta: { requiresAuth: true, roles: ['admin'] }
     },
-    {
-        path: '/page1',
-        name: 'Page1',
-        component: Page1,
-        meta: { requiresAuth: true, roles: ['admin'] }
-    }
 ]
 
 const router = createRouter({
@@ -54,6 +48,10 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.meta.roles && !to.meta.roles.includes(role)) {
+        return next({ name: 'Home' });
+    }
+
+    if (to.name === 'Welcome' && token) {
         return next({ name: 'Home' });
     }
 

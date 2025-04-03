@@ -1,6 +1,6 @@
 <template>
     <main class="flex w-full h-full">
-        <Sidebar v-if="auth.authUser === true" />
+        <Sidebar v-if="auth.authUser === true"  />
             <router-view />
     </main>
 </template>
