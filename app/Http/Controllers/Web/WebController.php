@@ -29,7 +29,7 @@ class WebController extends Controller
                 ], 401);
             }
 
-            $projects = $user->projectsFinished()->get();
+            $projects = $user->projects()->paginate();
 
             if ($projects->isEmpty()) {
                 return response()->json([

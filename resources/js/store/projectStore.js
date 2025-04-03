@@ -20,7 +20,7 @@ export const useProjectStore = defineStore('project', {
                 });
                 console.log(response);
                 if (response.status === 200) {
-                    this.project = response.data['data'];
+                    this.project = response.data['data']['data'];
                 }
                 
             } catch (error) {
