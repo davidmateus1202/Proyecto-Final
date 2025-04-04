@@ -79,7 +79,7 @@ class WebController extends Controller
         try {
 
             $project = Project::where('id', $request->project_id)->first();
-            $project = $project->abscisas()->get();
+            $project = $project->abscisas()->paginate();
 
             if (!$project) {
                 return response()->json([

@@ -1,12 +1,12 @@
 <template>
     <div class="flex flex-col w-full h-screen p-5 gap-y-5">
-        <header class="flex w-full h-auto items-end justify-between">
-            <button v-if="isActivated === true" @click="activate" class="block lg:hidden hover:bg-primary rounded-md p-2">
+        <header class="flex w-full h-auto items-center justify-center">
+            <button v-if="isActivated === true" @click="activate" class="block lg:hidden hover:bg-primary rounded-md p-2 mr-1">
                 <i class="pi pi-chevron-right text-black rotate-180"></i>
             </button>
             <h1 class="text-secondary font-extrabold">DB</h1>
             <!-- profile user -->
-            <div class="flex items-center gap-x-3">
+            <div class="flex items-center gap-x-3 ml-auto">
                 <img src="https://i.pinimg.com/736x/d9/6f/ea/d96fea5c1a36aada8b18340f626383a1.jpg"
                     class="w-10 rounded-full">
                 <span class="hidden lg:block font-bold text-gray-700">{{ auth.user.email }}</span>
@@ -39,8 +39,9 @@
                     <span class="font-extralight text-gray-400 text-[14px]">{{ project.description }}</span>
                  </div>
 
-                 <div v-else-if="projects.loading === true" class="flex w-full h-full items-center justify-center">
+                 <div v-else-if="projects.loading === true" class="flex flex-col w-full h-full items-center justify-center">
                     <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                    <span class="font-semibold text-gray-700">Cargando..</span>
                  </div>
 
                  <div v-if="projects.project.length === 0 && projects.loading === false" class="flex flex-col w-full h-full items-center justify-center">

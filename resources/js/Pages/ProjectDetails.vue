@@ -1,6 +1,6 @@
 <template>
     <!-- section 2 -->
-    <div v-if="props.projectId !== null" class="flex-col w-full lg:w-[70%] h-[98%] items-start justify-start gap-y-3 px-5 overflow-y-auto hide-scrollbar"
+    <div v-if="props.projectId !== null && projectStore.projectDetails.length > 0 && projectStore.projectDetailsLoading === false" class="flex-col w-full lg:w-[70%] h-[98%] items-start justify-start gap-y-3 px-5 overflow-y-auto hide-scrollbar"
         :class="{
             'flex': props.isActivated,
             'hidden lg:flex': !props.isActivated
@@ -8,14 +8,35 @@
         <h1 class="text-primary font-bold text-xl">DB - Analisis de Datos</h1>
         <span class="text-gray-400">Abscisas</span>
 
-        <!-- section de patologias -->
-        <div class="w-full min-h-60 h-auto flex overflow-x-auto gap-x-10 hide-scrollbar">
-            <section class="flex flex-col min-w-[14rem] w-56 h-56 items-start justify-center rounded-xl gap-y-2">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo-jzHHYNJ_1rckxebAiNtNrn5gDpgiHTy42p0djrIxEakrkCUyGceoXbt_FwZx_So6bM&usqp=CAU"
-                    class="rounded-xl shadow-md">
-                <h1 class="text-secondary font-bold text-ellipsis">Piel de cocodrilo</h1>
+        <!-- section de abscisas -->
+        <div v-for="(project, index) in projectStore.projectDetails" class="w-full min-h-24 h-auto flex overflow-x-auto gap-x-10 hide-scrollbar">
+            <section :key="index" class="flex flex-col min-w-[14rem]min-w-56 w-auto h-24 items-start justify-center rounded-xl gap-y-2 bg-gray-50 border-x-gray-300 shadow-sm px-10 py-3 cursor-pointer">
+                <div class="flex flex-wrap w-full h-auto items-center justify-start gap-x-3">
+                    <div class="flex w-12 h-12 min-w-12 bg-white rounded-full items-center justify-center">
+                        <h1 class="font-bold text-lg text-gray-700">{{ index + 1 }}</h1>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-gray-700 font-bold text-ellipsis ">{{ project.name }}</span>
+                        <span class="text-gray-400 font-semibold text-sm">{{ formatStatus(project.status) }}</span>
+                    </div>
+                </div>
             </section>
         </div>
+
+        <!-- navigation  -->
+         <div class="flex flex-col w-full h-auto items-start justify-start my-5">
+            <div class="flex w-full h-auto gap-x-2">
+                <div class="bg-gray-200 rounded-t-md">
+                    <h1 class="text-gray-400 font-bold m-2">Detalles de proyecto</h1>
+                </div>
+                
+                <div class="bg-gray-200 rounded-t-md">
+                    <h1 class="text-secondary font-bold m-2">Detalles de proyecto</h1>
+                </div>
+            </div>
+            <div class="w-full h-1 bg-gray-200 rounded-3xl shadow-md"></div>
+         </div>
+
 
         <FeedBack />
 
@@ -58,14 +79,37 @@
             </table>
         </div>
     </div>
+
+    <div v-if="projectStore.projectDetailsLoading === true" class="flex flex-col w-full lg:w-[70%] h-[98%] items-center justify-center"
+        :class="{
+                'flex': props.isActivated,
+                'hidden lg:flex': !props.isActivated
+            }">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <span class="font-semibold text-gray-700">Cargando..</span>
+    </div>
+
+    <div v-if="projectStore.projectDetails.length === 0 && projectStore.projectDetailsLoading === false" class="flex flex-col w-full lg:w-[70%] h-[98%] items-center justify-center"
+        :class="{
+                'flex': props.isActivated,
+                'hidden lg:flex': !props.isActivated
+            }">
+        <img :src="icon7" class="w-20 h-20 object-cover">
+        <h1 class="font-semibold text-gray-800 text-lg">No se encontraron resultados!</h1>
+        <span class="font-extralight text-gray-400 text-sm">Selecciona o cambia de proyecto para encontrar nuevos resultados.</span>
+    </div>
 </template>
 
 <script setup>
 
 // components
 import FeedBack from '../Components/FeedBack.vue';
-import { watch } from 'vue';
+import { useProjectStore } from '../store/projectStore';
 
+// images
+import icon7 from '../assets/icon7.png';
+
+import { watch } from 'vue';
 import { defineProps } from 'vue';
 
 const props = defineProps({
@@ -80,6 +124,8 @@ const props = defineProps({
     }
 })
 
+const projectStore = useProjectStore();
+
 watch(() => props.projectId, (newVal, oldVal) => {
     if (newVal !== oldVal && newVal !== null) {
         getProjectDetails(newVal);
@@ -87,7 +133,19 @@ watch(() => props.projectId, (newVal, oldVal) => {
 })
 
 const getProjectDetails = async (val) => {
-    console.log('getProjectDetails', val);
+    await projectStore.getProjectDetails(val);
+}
+
+// fotmat status
+const formatStatus = (status) => {
+    switch (status) {
+        case 'in_progress':
+            return 'En proceso';
+        case 'finished':
+            return 'Finalizado';
+        default:
+            return 'No definido';
+    }
 }
 
 
