@@ -1,6 +1,6 @@
 <template>
     <!-- section 2 -->
-    <div v-if="props.projectId !== null && projectStore.projectDetails.length > 0 && projectStore.projectDetailsLoading === false" class="flex-col w-full lg:w-[70%] h-[98%] items-start justify-start gap-y-3 px-5 overflow-y-auto hide-scrollbar"
+    <div v-if="props.projectId !== null && projectStore.projectDetails.length > 0 && projectStore.projectDetailsLoading === false" class="flex-col w-[95%] lg:w-[70%] h-[98%] items-start justify-start gap-y-3 px-5 overflow-y-auto hide-scrollbar"
         :class="{
             'flex': props.isActivated,
             'hidden lg:flex': !props.isActivated
@@ -10,25 +10,25 @@
 
         <!-- section de abscisas -->
         <div 
-            v-if="projectStore.projectDetails.length > 0"
-            class="flex flex-row w-full min-h-24 h-auto overflow-x-auto gap-x-10 hide-scrollbar flex-nowrap"
-            >
-            <section 
-                v-for="(project, index) in projectStore.projectDetails" 
-                :key="index" 
-                class="flex flex-col min-w-56 w-auto h-24 items-start justify-center rounded-xl gap-y-2 bg-gray-50 border-x-gray-300 shadow-sm px-10 py-3 cursor-pointer"
-            >
-                <div class="flex flex-wrap w-full h-auto items-center justify-start gap-x-3">
-                <div class="flex w-12 h-12 min-w-12 bg-white rounded-full items-center justify-center">
-                    <h1 class="font-bold text-lg text-gray-700">{{ index + 1 }}</h1>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-gray-700 font-bold text-ellipsis ">{{ project.name }}</span>
-                    <span class="text-gray-400 font-semibold text-sm">{{ formatStatus(project.status) }}</span>
-                </div>
-                </div>
-            </section>
+        v-if="projectStore.projectDetails.length > 0"
+        class="flex flex-row flex-nowrap w-full min-h-24 h-auto overflow-x-auto gap-x-6 pr-4 hide-scrollbar"
+        >
+        <div 
+            v-for="(project, index) in projectStore.projectDetails" 
+            :key="index" 
+            class="flex flex-col w-56 flex-shrink-0 h-24 items-start justify-center rounded-xl gap-y-2 bg-gray-50 border border-gray-200 shadow px-6 py-3 cursor-pointer"
+        >
+            <div class="flex w-full items-center gap-x-3">
+            <div class="flex w-12 h-12 bg-white rounded-full items-center justify-center shadow">
+                <h1 class="font-bold text-lg text-gray-700">{{ index + 1 }}</h1>
             </div>
+            <div class="flex flex-col overflow-hidden">
+                <span class="text-gray-700 font-bold truncate">{{ project.name }}</span>
+                <span class="text-gray-400 font-semibold text-sm">{{ formatStatus(project.status) }}</span>
+            </div>
+            </div>
+        </div>
+        </div>
 
         <!-- navigation  -->
          <div class="flex flex-col w-full h-auto items-start justify-start my-5">

@@ -29,7 +29,9 @@ class WebController extends Controller
                 ], 401);
             }
 
-            $projects = $user->projects()->paginate();
+            $projects = $user->projects()
+                ->orderBy('created_at', 'desc')
+                ->paginate(20);
 
             if ($projects->isEmpty()) {
                 return response()->json([

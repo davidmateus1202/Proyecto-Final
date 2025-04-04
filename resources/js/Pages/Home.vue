@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col w-full h-screen p-5 gap-y-5">
+    <div class="flex flex-col w-full h-screen p-5 gap-y-5 overflow-hidden">
         <header class="flex w-full h-auto items-center justify-center">
             <button v-if="isActivated === true" @click="activate" class="block lg:hidden hover:bg-primary rounded-md p-2 mr-1">
                 <i class="pi pi-chevron-right text-black rotate-180"></i>
