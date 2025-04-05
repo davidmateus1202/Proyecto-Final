@@ -34,7 +34,10 @@
 
                  <!-- item by project -->
                  <div @click="changeId(project.id)" v-if="projects.loading === false && projects.project.length !== 0" v-for="(project, index) in projects.project" :key="index" class="flex flex-col w-full h-auto rounded-md cursor-pointer">
-                    <img :src="project.url" class="w-full h-52 object-cover rounded-lg">
+                    <img 
+                    :src="project.url"
+                    @error="event => event.target.src = 'https://edteam-media.s3.amazonaws.com/blogs/big/2ab53939-9b50-47dd-b56e-38d4ba3cc0f0.png'"
+                    class="w-full h-52 object-cover rounded-lg">
                     <h3 class="font-semibold text-gray-500 text-lg mt-4">{{ project.name }}</h3>
                     <span class="font-extralight text-gray-400 text-[14px]">{{ project.description }}</span>
                  </div>

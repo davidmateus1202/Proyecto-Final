@@ -9,6 +9,7 @@ export const useProjectStore = defineStore('project', {
             loading: false,
             projectDetails: [],
             projectDetailsLoading: false,
+            abscisaSelected: null,
         }
     },
 
@@ -59,6 +60,15 @@ export const useProjectStore = defineStore('project', {
             } finally {
                 this.projectDetailsLoading = false;
             }
+        },
+
+        /**
+         * Set the selected abscissa.
+         * @param {Object} abscisa - The selected abscissa object.
+         */
+        setAbscisaSelected(abscisa) {
+            this.abscisaSelected = abscisa;
+            console.log(this.abscisaSelected);
         }
     }
 })

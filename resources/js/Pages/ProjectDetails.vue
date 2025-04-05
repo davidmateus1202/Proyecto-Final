@@ -15,8 +15,9 @@
         >
         <div 
             v-for="(project, index) in projectStore.projectDetails" 
-            :key="index" 
-            class="flex flex-col w-56 flex-shrink-0 h-24 items-start justify-center rounded-xl gap-y-2 bg-gray-50 border border-gray-200 shadow px-6 py-3 cursor-pointer"
+            :key="index"
+            @click="selectAbscisa(project)"
+            class="flex flex-col w-56 flex-shrink-0 h-24 items-start justify-center rounded-xl gap-y-2 bg-gray-50 border border-gray-200 shadow px-6 py-3 cursor-pointer hover:shadow-lg hover:transition-all duration-200 hover:bg-gray-100"
         >
             <div class="flex w-full items-center gap-x-3">
             <div class="flex w-12 h-12 bg-white rounded-full items-center justify-center shadow">
@@ -33,57 +34,30 @@
         <!-- navigation  -->
          <div class="flex flex-col w-full h-auto items-start justify-start my-5">
             <div class="flex w-full h-auto gap-x-2">
-                <div class="bg-gray-200 rounded-t-md">
-                    <h1 class="text-gray-400 font-bold m-2">Detalles de proyecto</h1>
+                <div
+                    @click="selectedSection = 'register'" 
+                    class="bg-gray-200 rounded-t-md cursor-pointer">
+                    <h1 class="text-secondary font-bold my-2 mx-5 text-sm hover:text-black">Detalles de proyecto</h1>
                 </div>
                 
-                <div class="bg-gray-200 rounded-t-md">
-                    <h1 class="text-secondary font-bold m-2">Detalles de proyecto</h1>
+                <div 
+                    @click="selectedSection = 'details'"
+                    v-if="projectStore.abscisaSelected !== null" class="bg-gray-200 rounded-t-md cursor-pointer hover:transition-all duration-200">
+                    <h1 class="text-secondary font-bold my-2 mx-5 text-sm hover:text-black">{{ projectStore.abscisaSelected.name }}</h1>
                 </div>
             </div>
             <div class="w-full h-1 bg-gray-200 rounded-3xl shadow-md"></div>
          </div>
+         
+        <!-- layout for details -->
+        <div class="flex flex-col w-full h-full items-start justify-start overflow-y-auto hide-scrollbar"
+            :class="{
+                'flex': props.isActivated,
+                'hidden lg:flex': !props.isActivated
+            }">
 
-
-        <FeedBack />
-
-        <!-- tabla de registro de datos -->
-        <div class="flex flex-col w-full h-auto shadow-sm p-5 rounded-lg mt-5">
-            <h1 class="text-secondary font-bold">Registro de patologias</h1>
-            <div class="w-full h-1 bg-gray-200 rounded-3xl shadow-md my-2"></div>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="text-gray-500 border-b py-2">Ingeniero</th>
-                        <th class="text-gray-500 border-b py-2">Fecha</th>
-                        <th class="text-gray-500 border-b py-2">Accion</th>
-                        <th class="text-gray-500 border-b py-2">Patologia</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th class="flex  h-auto p-3 justify-start gap-x-3">
-                            <img src="https://i.pinimg.com/736x/d9/6f/ea/d96fea5c1a36aada8b18340f626383a1.jpg"
-                                class="w-10 h-10 rounded-full">
-                            <div class="flex flex-col items-start">
-                                <h1>Yuly Paola Gonzalez</h1>
-                                <span class="text-gray-400 font-extralight text-sm">Ingeniero Civil</span>
-                            </div>
-                        </th>
-                        <th>
-                            <span class="text-gray-400">12/12/2021</span>
-                        </th>
-                        <th>
-                            <span
-                                class="bg-green-200 p-3 rounded-xl border-2 border-green-500 text-green-500">Actualizacion</span>
-                        </th>
-                        <th>
-                            <span class="text-gray-400 font">Piel de cocodrilo</span>
-                        </th>
-                    </tr>
-
-                </tbody>
-            </table>
+            <component :is="selectView" />
+            
         </div>
     </div>
 
@@ -110,15 +84,17 @@
 <script setup>
 
 // components
-import FeedBack from '../Components/FeedBack.vue';
+import RegisterData from '../Components/ProjectDetails/RegisterData.vue';
+import Details from '../Components/ProjectDetails/Details.vue';
+
+// store
 import { useProjectStore } from '../store/projectStore';
 
 // images
 import icon7 from '../assets/icon7.png';
+import { watch, defineProps, ref, computed } from 'vue';
 
-import { watch } from 'vue';
-import { defineProps } from 'vue';
-
+const selectedSection = ref('register');
 const props = defineProps({
     isActivated: {
         type: Boolean,
@@ -155,5 +131,21 @@ const formatStatus = (status) => {
     }
 }
 
+// seleccionar una determinada abscisa
+const selectAbscisa = (abscisa) => {    
+    projectStore.setAbscisaSelected(abscisa);
+}
+
+// seleccion de vista
+const selectView = computed(() => {
+    switch (selectedSection.value) {
+        case 'details':
+            return Details;
+        case 'register':
+            return RegisterData;
+        default:
+            return RegisterData;
+        }
+})
 
 </script>
