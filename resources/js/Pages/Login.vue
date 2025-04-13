@@ -77,7 +77,7 @@
                   v-model="email"
                   name="email"
                   placeholder="Correo electrónico"
-                  class="w-full border border-gray-200 rounded-xl p-3 text-sm text-gray-700 shadow-xs focus:border-none"
+                  class="w-full border border-gray-200 rounded-3xl p-4 text-sm text-gray-700 shadow-xs focus:border-none outline-none"
                 />
     
                 <input
@@ -86,16 +86,17 @@
                   v-model="password"
                   name="password"
                   placeholder="Contraseña"
-                  class="w-full border border-gray-200 rounded-xl p-3 text-sm text-gray-700 shadow-xs focus:border-none"
+                  class="w-full border border-gray-200 rounded-3xl p-4 text-sm text-gray-700 shadow-xs focus:border-none outline-none"
                 />
     
-    
-              <div class="flex flex-col md:flex-row items-center justify-between gap-5">
                 <button 
                 @click="login"
-                class="inline-block shrink-0 rounded-md border border-primary bg-primary px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-secondary focus:ring-3 focus:outline-hidden">
-                  Iniciar sesión
+                class="inline-block h-12 lg:min-w-96 shrink-0 rounded-3xl border border-primary bg-primary px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-secondary focus:ring-3 focus:outline-hidden">
+                  <i v-if="isLoading === true" class="pi pi-spin pi-spinner" style="font-size: 1.5rem"></i>
+                  <span v-else="false">Iniciar sesión</span>
                 </button>
+    
+              <div class="flex flex-col md:flex-row items-center justify-between gap-5">
     
                 <p class="mt-4 text-sm text-gray-500 sm:mt-0">
                   Aun no tienes cuenta?
@@ -106,6 +107,7 @@
           </div>
         </main>
       </div>
+      <AlertError v-if="isError" class="absolute top-0 left-0 right-0 mx-auto w-96" />
     </section>
   </template>
 
@@ -114,20 +116,38 @@
   import { useAuthStore } from '../store/authStore';
   import { ref } from 'vue';
   import { useRouter } from "vue-router";
+  import AlertError from '../Components/Alert/AlertError.vue';
 
   const route = useRouter();
 
   // variables
   const email = ref('');
   const password = ref('');
+  const isLoading = ref(false);
+  const isError = ref(false);
 
   const auth = useAuthStore();
 
   // methods
   const login = async () => {
     if (email.value && password.value) {
+      isLoading.value = true;
       const response = await auth.login(email.value, password.value);
+      if (response === false) {
+        isError.value = true;
+        setTimeout(() => {
+          isError.value = false;
+        }, 3000);
+        isLoading.value = false;
+        return;
+      }
+      isLoading.value = false;
       if (response) route.push({ name: 'Home' });
+    } else {
+      isError.value = true;
+      setTimeout(() => {
+        isError.value = false;
+      }, 3000);
     }
   }
 

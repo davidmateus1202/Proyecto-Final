@@ -130,4 +130,14 @@ class AbscisaController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Obtiene la información de las patologias y nivel de daño de la abscisa
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getChartData(Request $request)
+    {
+        
+    }
 }

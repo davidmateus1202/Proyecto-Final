@@ -18,8 +18,6 @@ import { defineStore } from "pinia";
                     password: password
                 });
 
-                console.log(response.data);
-
                 if (response.status === 200) {
                     this.user = response.data.user;
                     localStorage.setItem('token', response.data.token);

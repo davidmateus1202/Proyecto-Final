@@ -7,18 +7,18 @@
 
         <!-- icons -->
         <div class="flex md:flex-col w-full md:w-auto items-center justify-center mt-0 md:mt-10 gap-y-8 gap-x-5">
-            <button class="hover:bg-primary rounded-md p-2">
+            <button class="hover:bg-primary rounded-3xl p-2">
                 <img :src="icon2" class="w-8">
             </button>
 
-            <button class="hover:bg-primary rounded-md p-2">
+            <button class="hover:bg-primary rounded-3xl p-2">
                 <img :src="icon3" class="w-8">
             </button>
         </div>
 
         <!-- Parte inferior (Ajustes y Perfil) -->
         <div class="hidden md:flex flex-col justify-center items-center gap-3">
-            <button @click="logout" class="hover:rounded-md group">
+            <button @click="logout" class="hover:rounded-3xl group">
                 <img :src="logoutIcon" class="w-8">
             </button>
             <img class="rounded-full w-10 h-10 border border-spacing-2"

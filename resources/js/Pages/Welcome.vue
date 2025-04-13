@@ -19,14 +19,14 @@
                 <!-- card information -->
                 <div class="flex flex-col md:flex-row w-full lg:max-w-[60%] h-auto gap-3 md:gap-10 items-center px-10">
                     <h1 class="text-center md:text-right font-extrabold md:text-xl lg:text-3xl xl:text-4xl">Lorem ipsum dolor sit amet consectetur</h1>
-                    <div class="w-full md:w-3 h-1 md:h-32 bg-primary rounded-md"></div>
+                    <div class="w-full md:w-3 h-1 md:h-32 bg-primary rounded-3xl"></div>
                     <span class="font-extralight text-xs text-gray-400">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quod inventore odit provident quae voluptate rem aspernatur reprehenderit quisquam sit Lorem ipsum dolor sit amet consectetur adipisicing.</span>
                 </div> 
 
                 <!-- card information -->
                  <div class="flex w-full h-auto items-center justify-center mt-16 px-10">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full  md:max-w-[80%] h-auto">
-                        <section class="flex flex-col items-center justify-center bg-white rounded-xl p-5 gap-y-3">
+                        <section class="flex flex-col items-center justify-center bg-white rounded-3xl p-5 gap-y-3">
                             <img :src="icon6" class="w-14">
                             <h1 class="font-extrabold text-lg">Lorem ipsum dolor</h1>
                             <span class="text-xs text-gray-400 text-center mx-10">
@@ -34,16 +34,7 @@
                             </span>
                         </section>
 
-                        <section class="flex flex-col items-center justify-center bg-white rounded-xl p-5 gap-y-3">
-                            <img :src="icon6" class="w-14">
-                            <h1 class="font-extrabold text-lg">Lorem ipsum dolor</h1>
-                            <span class="text-xs text-gray-400 text-center mx-10">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quod inventore odit provident quae voluptate rem aspernatur reprehenderit quisquam sit Lorem ipsum dolor sit amet consectetur adipisicing.
-                            </span>
-
-                        </section>
-
-                        <section class="flex flex-col items-center justify-center bg-white rounded-xl p-5 gap-y-3">
+                        <section class="flex flex-col items-center justify-center bg-white rounded-3xl p-5 gap-y-3">
                             <img :src="icon6" class="w-14">
                             <h1 class="font-extrabold text-lg">Lorem ipsum dolor</h1>
                             <span class="text-xs text-gray-400 text-center mx-10">
@@ -52,7 +43,16 @@
 
                         </section>
 
-                        <section class="flex flex-col items-center justify-center bg-white rounded-xl p-5 gap-y-3">
+                        <section class="flex flex-col items-center justify-center bg-white rounded-3xl p-5 gap-y-3">
+                            <img :src="icon6" class="w-14">
+                            <h1 class="font-extrabold text-lg">Lorem ipsum dolor</h1>
+                            <span class="text-xs text-gray-400 text-center mx-10">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto quod inventore odit provident quae voluptate rem aspernatur reprehenderit quisquam sit Lorem ipsum dolor sit amet consectetur adipisicing.
+                            </span>
+
+                        </section>
+
+                        <section class="flex flex-col items-center justify-center bg-white rounded-3xl p-5 gap-y-3">
                             <img :src="icon6" class="w-14">
                             <h1 class="font-extrabold text-lg">Lorem ipsum dolor</h1>
                             <span class="text-xs text-gray-400 text-center mx-10">

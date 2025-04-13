@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col w-full h-screen p-5 gap-y-5 overflow-hidden">
         <header class="flex w-full h-auto items-center justify-center">
-            <button v-if="isActivated === true" @click="activate" class="block lg:hidden hover:bg-primary rounded-md p-2 mr-1">
+            <button v-if="isActivated === true" @click="activate" class="block lg:hidden hover:bg-primary rounded-3xl p-2 mr-1">
                 <i class="pi pi-chevron-right text-black rotate-180"></i>
             </button>
             <h1 class="text-secondary font-extrabold">DB</h1>
@@ -25,7 +25,7 @@
                 }">
 
                 <!-- search -->
-                 <div class="flex w-full rounded-lg bg-gray-100 px-5 py-3 items-center gap-x-4">
+                 <div class="flex w-full rounded-3xl bg-gray-100 px-5 py-3 items-center gap-x-4">
                     <i class="pi pi-search text-gray-400"></i>
                     <input class="w-full h-auto bg-transparent outline-none " type="text" placeholder="Buscar">
                  </div>
@@ -33,11 +33,11 @@
                  <h3 class="font-semibold text-gray-500">Proyectos</h3>
 
                  <!-- item by project -->
-                 <div @click="changeId(project.id)" v-if="projects.loading === false && projects.project.length !== 0" v-for="(project, index) in projects.project" :key="index" class="flex flex-col w-full h-auto rounded-md cursor-pointer">
+                 <div @click="changeId(project.id)" v-if="projects.loading === false && projects.project.length !== 0" v-for="(project, index) in projects.project" :key="index" class="flex flex-col w-full h-auto rounded-3xl cursor-pointer">
                     <img 
                     :src="project.url"
                     @error="event => event.target.src = 'https://edteam-media.s3.amazonaws.com/blogs/big/2ab53939-9b50-47dd-b56e-38d4ba3cc0f0.png'"
-                    class="w-full h-52 object-cover rounded-lg">
+                    class="w-full h-52 object-cover rounded-3xl">
                     <h3 class="font-semibold text-gray-500 text-lg mt-4">{{ project.name }}</h3>
                     <span class="font-extralight text-gray-400 text-[14px]">{{ project.description }}</span>
                  </div>

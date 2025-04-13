@@ -17,7 +17,7 @@
             v-for="(project, index) in projectStore.projectDetails" 
             :key="index"
             @click="selectAbscisa(project)"
-            class="flex flex-col w-56 flex-shrink-0 h-24 items-start justify-center rounded-xl gap-y-2 bg-gray-50 border border-gray-200 shadow px-6 py-3 cursor-pointer hover:shadow-lg hover:transition-all duration-200 hover:bg-gray-100"
+            class="flex flex-col w-56 flex-shrink-0 h-24 items-start justify-center rounded-3xl gap-y-2 bg-gray-50 border border-gray-200 shadow px-6 py-3 cursor-pointer hover:shadow-lg hover:transition-all duration-200 hover:bg-gray-100"
         >
             <div class="flex w-full items-center gap-x-3">
             <div class="flex w-12 h-12 bg-white rounded-full items-center justify-center shadow">
@@ -36,13 +36,13 @@
             <div class="flex w-full h-auto gap-x-2">
                 <div
                     @click="selectedSection = 'register'" 
-                    class="bg-gray-200 rounded-t-md cursor-pointer">
+                    class="bg-gray-200 rounded-t-2xl cursor-pointer">
                     <h1 class="text-secondary font-bold my-2 mx-5 text-sm hover:text-black">Detalles de proyecto</h1>
                 </div>
                 
                 <div 
                     @click="selectedSection = 'details'"
-                    v-if="projectStore.abscisaSelected !== null" class="bg-gray-200 rounded-t-md cursor-pointer hover:transition-all duration-200">
+                    v-if="projectStore.abscisaSelected !== null" class="bg-gray-200 rounded-t-2xl cursor-pointer hover:transition-all duration-200">
                     <h1 class="text-secondary font-bold my-2 mx-5 text-sm hover:text-black">{{ projectStore.abscisaSelected.name }}</h1>
                 </div>
             </div>
@@ -50,11 +50,7 @@
          </div>
          
         <!-- layout for details -->
-        <div class="flex flex-col w-full h-full items-start justify-start overflow-y-auto hide-scrollbar"
-            :class="{
-                'flex': props.isActivated,
-                'hidden lg:flex': !props.isActivated
-            }">
+        <div class="flex flex-col w-full h-full items-start justify-start">
 
             <component :is="selectView" />
             
