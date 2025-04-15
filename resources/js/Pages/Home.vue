@@ -90,6 +90,7 @@ onBeforeMount( async () => {
 const changeId = (id) => {
     isActivated.value = true;
     projectId.value = id
+    projects.abscisaSelected = null;
 }
 
 </script>

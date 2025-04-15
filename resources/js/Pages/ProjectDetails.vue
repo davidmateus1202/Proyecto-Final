@@ -107,6 +107,7 @@ const projectStore = useProjectStore();
 
 watch(() => props.projectId, (newVal, oldVal) => {
     if (newVal !== oldVal && newVal !== null) {
+        selectedSection.value = 'register';
         getProjectDetails(newVal);
     }
 })
@@ -128,7 +129,8 @@ const formatStatus = (status) => {
 }
 
 // seleccionar una determinada abscisa
-const selectAbscisa = (abscisa) => {    
+const selectAbscisa = (abscisa) => {   
+    selectedSection.value = 'register'; 
     projectStore.setAbscisaSelected(abscisa);
 }
 
