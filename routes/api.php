@@ -24,6 +24,7 @@ Route::prefix('abscisa')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AbscisaController::class, 'index']);
     Route::post('/create', [AbscisaController::class, 'create']);
     Route::delete('/delete', [AbscisaController::class, 'delete']);
+    Route::get('/chart/show/{abscisa_id}', [AbscisaController::class, 'getChartData']);
 });
 
 Route::prefix('slab')->middleware('auth:sanctum')->group(function () {

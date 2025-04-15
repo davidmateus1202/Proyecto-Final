@@ -136,8 +136,67 @@ class AbscisaController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getChartData(Request $request)
+    public function getChartData($abscisa_id)
     {
+        try {
+        $abscisa = Abscisa::find($abscisa_id);
+
+        $area = 0;
+        $damageArea = 0;
+        $percentageDamage = 0;
+
+        if (!$abscisa) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Abscisa not found'
+            ], 404);
+        }
+        $slabs = $abscisa->slabsWithPathologies()->get();
+
+        $groupData = [];
+
+        foreach ($slabs as $slab) {
+            foreach ($slab->pathologies as $pathology) {
+                $name = $pathology->name;
+                if (!isset($groupData[$name])) {
+                    $groupData[$name] = [
+                        'count' => 0,
+                    ];
+                }
+                $groupData[$name]['count']++;
+                $damageArea += $pathology->long_damage * $pathology->width_damage;
+            }
+
+            // area
+            $areaSlab = $slab->long * $slab->width;
+            $area += $areaSlab;
+        }
+
+        $formattedData = [];
+        foreach ($groupData as $name => $data) {
+            $formattedData[] = [
+                'name' => $name,
+                'count' => $data['count'],
+            ];
+        }
+
+        // Calculate the percentage of damage area
+        if ($area > 0) {
+            $percentageDamage = ($damageArea / $area) * 100;
+        }
         
+        return response()->json([
+            'success' => true,
+            'slabs' => $slabs,
+            'damageArea' => $percentageDamage,
+            'chart' => $formattedData
+        ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

@@ -10,6 +10,9 @@ export const useProjectStore = defineStore('project', {
             projectDetails: [],
             projectDetailsLoading: false,
             abscisaSelected: null,
+            abscisaDetails: [],
+            chart: [],
+            damageArea: [],
         }
     },
 
@@ -68,7 +71,30 @@ export const useProjectStore = defineStore('project', {
          */
         setAbscisaSelected(abscisa) {
             this.abscisaSelected = abscisa;
-            console.log(this.abscisaSelected);
+        },
+
+        /**
+         * Get details of the selected abscissa.
+         * @param {number} id - The ID of the abscissa to fetch details for.
+         * @returns {Promise<void>} - A promise that resolves when the abscissa details are fetched successfully.
+         */
+        async getChartAbscisaDetails(id) {
+            try {
+                const response = await axios.get(`/api/abscisa/chart/show/${id}`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                
+                console.log(response);
+                if (response.status === 200) {
+                    this.chart = response.data.chart;
+                    this.damageArea = [
+                        { name: 'Area de daño', data: response.data.damageArea },
+                        { name: 'Area de no daño', data: 100 - response.data.damageArea },
+                    ];
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 })
