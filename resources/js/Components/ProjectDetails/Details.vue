@@ -58,12 +58,14 @@
                             </td>
 
                             <td class="text-center">
-                                <span class="text-[12px] font-semibold text-gray-500">{{ pathology.name }}</span>
+                                <span class="text-[12px] xl:text-[14px] font-semibold text-gray-500">{{ pathology.name }}</span>
                             </td>
 
                             <td class="text-center">
-                                <div :class="{ [formattedDamageClass(pathology.type_damage)]: true }">
-                                    <span class="text-sm font-semibold">{{ formattedDamage(pathology.type_damage) }}</span>
+                                <div class="flex w-full h-full items-center justify-center">
+                                    <div :class="{ [formattedDamageClass(pathology.type_damage)]: true }">
+                                        <span class="text-sm font-semibold">{{ formattedDamage(pathology.type_damage) }}</span>
+                                    </div>
                                 </div>
                             </td>
 
