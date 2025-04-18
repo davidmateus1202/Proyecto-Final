@@ -13,6 +13,8 @@ export const useProjectStore = defineStore('project', {
             abscisaDetails: [],
             chart: [],
             damageArea: [],
+            placaSelectedId: null,
+            pathologies: [],
         }
     },
 
@@ -28,7 +30,6 @@ export const useProjectStore = defineStore('project', {
                 const response = await axios.get('/api/web/projects/index', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
-                console.log(response);
                 if (response.status === 200) {
                     this.project = response.data['data']['data'];
                 }
@@ -84,7 +85,6 @@ export const useProjectStore = defineStore('project', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
                 
-                console.log(response);
                 if (response.status === 200) {
                     this.chart = response.data.chart;
                     this.damageArea = [
@@ -94,6 +94,21 @@ export const useProjectStore = defineStore('project', {
                 }
             } catch (error) {
                 console.log(error);
+            }
+        },
+
+        /**
+         * Set the selected placa ID.
+         * @param {number} id - The ID of the selected placa.
+         */
+        setPlacaSelectedId(id) {
+            this.pathologies = [];
+            this.placaSelectedId = id;
+            const slabWithPathologies = this.projectDetails[0].slabs_with_pathologies.find(slab => slab.id === id);
+            if (slabWithPathologies) {
+                this.pathologies = slabWithPathologies.pathologies;
+            } else {
+                this.pathologies = [];
             }
         }
     }
