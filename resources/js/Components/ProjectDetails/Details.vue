@@ -6,7 +6,14 @@
         <div class="grid grid-cols-1 md:grid-cols-2 w-full h-auto">
             <!-- grafic 1 -->
             <div class="flex-1 flex bg-gray-50 rounded-3xl p-5 max-h-80">
-                <GraficView />
+                <GraficView v-if="projectStore.chart.length > 0" />
+                <div v-else class="flex flex-col items-center justify-center w-full h-full">
+                    <img :src="icon9" class="w-20 h-20" />
+                    <h1 class="font-bold text-gray-600 mt-4">No se encontraron datos</h1>
+                    <span class="text-xs lg:max-w-80 text-center text-gray-400">No se encontraron datos para la
+                        gráfica.</span>
+
+                </div>
             </div>
             <div class="flex-1 mt-14 md:mt-0 flex flex-col p-5 items-center justify-center max-h-80">
                 <PieGraficView />
@@ -23,6 +30,7 @@
                     <h1 class="text-secondary font-bold">{{ projectStore.placaSelectedId !== null ? `Placa -
                         ${projectStore.placaSelectedId}` : 'Patologias detectadas' }}</h1>
                     <div v-if="projectStore.placaSelectedId !== null"
+                        @click="toogleMap"
                         class="flex bg-gray-100 w-8 h-8 rounded-full items-center justify-center shadow-sm cursor-pointer hover:bg-gray-200">
                         <i class="pi pi-map"></i>
                     </div>
@@ -30,13 +38,12 @@
                 <button ref="filterButton" @click="toggleFilterDropdown"
                     class="flex items-center gap-x-2 bg-gray-100 rounded-3xl px-5 py-2 shadow-sm hover:bg-gray-200">
                     <i class="pi pi-filter"></i>
-                    <h1>{{ projectStore.placaSelectedId !== null ? `Placa - ${projectStore.placaSelectedId}` : 'Filtros'
-                        }}</h1>
+                    <h1>{{ projectStore.placaSelectedId !== null ? `Placa - ${projectStore.placaSelectedId}` : 'Filtros' }}</h1>
                 </button>
             </div>
             <div class="w-full h-1 bg-gray-200 rounded-3xl shadow-md my-2"></div>
 
-            <div class="hidden md:flex w-full h-auto items-center justify-center">
+            <div v-if="projectStore.pathologies.length > 0" class="hidden md:flex w-full h-auto items-center justify-center">
                 <table class="w-full h-auto">
                     <thead>
                         <tr>
@@ -80,7 +87,7 @@
                 </table>
             </div>
 
-            <div class="flex md:hidden w-full h-auto items-center justify-center">
+            <div v-if="projectStore.pathologies.length > 0" class="flex md:hidden w-full h-auto items-center justify-center">
                 <table class="w-full h-auto mt-4">
                     <thead>
                         <tr>
@@ -110,6 +117,14 @@
                     </tbody>
                 </table>
             </div>
+
+            <div v-if="projectStore.pathologies.length === 0" class="flex flex-col items-center justify-center mt-10">
+                <img :src="icon8" class="w-20 h-20" />
+                <h1 class="font-bold text-gray-600 mt-4">No se encontraron patologías</h1>
+                <span class="text-xs lg:max-w-80 text-center text-gray-400">No se encontraron patologías en la placa
+                    seleccionada.</span>
+
+            </div>
             
         </div>
 
@@ -121,8 +136,12 @@
 
     </div>
 
-    <!-- Filters Dropdown -->
+    <!-- Dropdown or modals -->
     <FilterDropdown v-if="showFilter" :position="position" @close="closeDropdown" />
+    <AlertError v-if="isErrorMessage" class="absolute top-0 left-0 right-0 mx-auto w-96"/>
+    <ModalGoogleMaps v-if="showMap" @close="toogleMap" />
+
+
 
 </template>
 
@@ -134,6 +153,10 @@ import { onMounted, ref, nextTick, onUnmounted } from 'vue';
 import { useProjectStore } from '../../store/projectStore';
 import { useAuthStore } from '../../store/authStore';
 import FilterDropdown from './FilterDropdown.vue';
+import icon8 from '../../assets/icon8.png';
+import icon9 from '../../assets/icon9.png';
+import AlertError from '../Alert/AlertError.vue';
+import ModalGoogleMaps from './ModalGoogleMaps.vue';
 
 const projectStore = useProjectStore()
 const isLoading = ref(false);
@@ -141,13 +164,19 @@ const user = useAuthStore();
 const filterButton = ref(null);
 const position = ref({ top: 0, left: 0 });
 const showFilter = ref(false);
+const isErrorMessage = ref(false);
+const showMap = ref(false);
 
 
 onMounted(async () => {
     isLoading.value = true;
     await projectStore.getChartAbscisaDetails(projectStore.abscisaSelected.id);
-    console.log(projectStore.projectDetails)
-    projectStore.setPlacaSelectedId(projectStore.projectDetails[0].slabs_with_pathologies[0].id);
+    if (projectStore.abscisaSelected.slabs_with_pathologies.length > 0) {
+        projectStore.setPlacaSelectedId(projectStore.abscisaSelected.slabs_with_pathologies[0].id);
+    } else {
+        projectStore.pathologies = [];
+        projectStore.setPlacaSelectedId(null);
+    }
     isLoading.value = false;
 
     window.addEventListener('resize', handleResize);
@@ -161,8 +190,16 @@ const formattedArea = (longSize, widthSize) => {
 }
 
 const toggleFilterDropdown = async () => {
-    console.log(projectStore.projectDetails);
     nextTick(() => {
+        // Verifica si el botón de filtro está visible
+        if (projectStore.abscisaSelected.slabs_with_pathologies.length === 0) {
+            isErrorMessage.value = true;
+            setTimeout(() => {
+                isErrorMessage.value = false;
+            }, 3000);
+            return;
+        }
+
         if (filterButton.value) {
             // Verifica las dimensiones del botón
             const positionValue = filterButton.value.getBoundingClientRect();
@@ -187,6 +224,10 @@ const handleResize = () => {
 
 const closeDropdown = () => {
     showFilter.value = false;
+}
+
+const toogleMap = () => {
+    showMap.value = !showMap.value;
 }
 
 onUnmounted(() => {

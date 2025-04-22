@@ -15,6 +15,7 @@ export const useProjectStore = defineStore('project', {
             damageArea: [],
             placaSelectedId: null,
             pathologies: [],
+            slabSelected: null
         }
     },
 
@@ -104,11 +105,16 @@ export const useProjectStore = defineStore('project', {
         setPlacaSelectedId(id) {
             this.pathologies = [];
             this.placaSelectedId = id;
-            const slabWithPathologies = this.projectDetails[0].slabs_with_pathologies.find(slab => slab.id === id);
-            if (slabWithPathologies) {
-                this.pathologies = slabWithPathologies.pathologies;
-            } else {
-                this.pathologies = [];
+            const slab = this.projectDetails.find(slab => slab.id === this.abscisaSelected.id);
+
+            if (slab) {
+                const slabWithPathologies = slab.slabs_with_pathologies.find(slab => slab.id === id);
+                if (slabWithPathologies) {
+                    this.slabSelected = slabWithPathologies;
+                    this.pathologies = slabWithPathologies.pathologies;
+                } else {
+                    this.pathologies = [];
+                }
             }
         }
     }
