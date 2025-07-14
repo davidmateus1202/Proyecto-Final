@@ -6,6 +6,7 @@ import Welcome from '../Pages/Welcome.vue';
 import Login from '../Pages/Login.vue';
 import Error from '../Error/Error.vue';
 import ProjectDetails from '../Pages/ProjectDetails.vue';
+import About from '../Pages/About.vue';
 
 const routes = [
     {
@@ -28,6 +29,11 @@ const routes = [
         component: Home,
         meta: { requiresAuth: true, roles: ['admin'] }
     },
+    {
+        path: '/about',
+        name: 'About',
+        component: About
+    }
 ]
 
 const router = createRouter({

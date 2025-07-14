@@ -1,45 +1,98 @@
 <template>
-    <Disclosure as="nav" v-slot="{ open }">
-      <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div class="relative flex h-16 items-center justify-between">
-          <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <!-- Mobile menu button-->
-            <DisclosureButton class="relative inline-flex items-center justify-center rounded-3xl p-2 text-black hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-              <span class="absolute -inset-0.5" />
-              <span class="sr-only">Open main menu</span>
-              <Bars3Icon v-if="!open" class="block size-6" aria-hidden="true" />
-              <XMarkIcon v-else class="block size-6" aria-hidden="true" />
-            </DisclosureButton>
-          </div>
-          <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div class="flex shrink-0 items-center">
-              <img class="h-8 w-auto" :src="icon" alt="Your Company" />
+    <nav :class="[
+        'fixed w-full z-30 top-0 start-0 transition-all duration-300 ease-in-out',
+        isScrolled ? 'bg-white' : 'bg-transparent',
+    ]">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <img :src="logo" class="h-10" alt="Flowbite Logo">
+                
+            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
+                <ul
+                    class="flex flex-col p-4 md:p-0 mt-4 font-medium rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0">
+                    <li>
+                        <button @click="navigateTo('Home')" :class="[
+                            'block py-2 px-3 rounded-sm md:bg-transparent md:p-0 cursor-pointer',
+                            isScrolled ? 'text-black hover:bg-gray-100 md:hover:bg-transparent' : 'text-white hover:bg-gray-100 md:hover:bg-transparent'
+                        ]">Inicio</button>
+                    </li>
+                    <li>
+                        <button @click="navigateTo('About')" :class="[
+                            'block py-2 px-3 rounded-sm md:bg-transparent md:p-0 cursor-pointer',
+                            isScrolled ? 'text-black hover:bg-gray-100 md:hover:bg-transparent' : 'text-white hover:bg-gray-100 md:hover:bg-transparent'
+                        ]">Nosotros</button>     
+                    </li>
+                    <li>
+                        <button @click="navigateTo('Services')" :class="[
+                            'block py-2 px-3 rounded-sm md:bg-transparent md:p-0 cursor-pointer',
+                            isScrolled ? 'text-black hover:bg-gray-100 md:hover:bg-transparent' : 'text-white hover:bg-gray-100 md:hover:bg-transparent'
+                        ]">Servicios</button>
+                    </li>
+                    <li>
+                        <button @click="navigateTo('Gallery')" :class="[
+                            'block py-2 px-3 rounded-sm md:bg-transparent md:p-0 cursor-pointer',
+                            isScrolled ? 'text-black hover:bg-gray-100 md:hover:bg-transparent' : 'text-white hover:bg-gray-100 md:hover:bg-transparent'
+                        ]">Galeria</button>
+                    </li>
+                    <li>
+                        <button @click="navigateTo('Contact')" :class="[
+                            'block py-2 px-3 rounded-sm md:bg-transparent md:p-0 cursor-pointer',
+                            isScrolled ? 'text-black hover:bg-gray-100 md:hover:bg-transparent' : 'text-white hover:bg-gray-100 md:hover:bg-transparent'
+                        ]">Contacto</button>
+                    </li>
+                </ul>
             </div>
-            <div class="hidden sm:ml-6 sm:block z-10">
-              <div class="flex space-x-4">
-                <a v-for="item in navigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-primary text-white' : 'text-gray-400 hover:bg-primary hover:text-white', 'rounded-3xl px-3 py-2 text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</a>
-              </div>
+
+            <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+
+                <button data-collapse-toggle="navbar-sticky" type="button"
+                    class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    aria-controls="navbar-sticky" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 17 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M1 1h15M1 7h15M1 13h15" />
+                    </svg>
+                </button>
             </div>
-          </div>
         </div>
-      </div>
-      <DisclosurePanel class="absolute top-full left-0 w-full z-50 sm:hidden">
-        <div class="space-y-1 px-2 pb-3 pt-2">
-          <DisclosureButton v-for="item in navigation" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-primary text-white' : 'text-white hover:bg-primary hover:text-white', 'block rounded-3xl px-3 py-2 text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</DisclosureButton>
-        </div>
-      </DisclosurePanel>
-    </Disclosure>
-  </template>
-  
-  <script setup>
-  import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
-  import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-  import icon from '@/assets/icon5.png'
-  
-  const navigation = [
-    { name: 'Inicio', href: '#', current: true },
-    { name: 'Team', href: '#', current: false },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Calendar', href: '#', current: false },
-  ]
-  </script>
+    </nav>
+
+</template>
+
+<script setup>
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import logo from '../assets/icon11.png';
+
+const router = useRouter();
+const point_scroll = 400;
+const isScrolled = ref(false);
+
+const handleScroll = () => {
+    if (window.scrollY > point_scroll) {
+        isScrolled.value = true;
+    } else {
+        isScrolled.value = false;
+    }
+}
+
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check scroll position on mount
+})
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+});
+
+const navigateTo = (name) => {
+  try {
+    router.push({ name });
+  } catch (e) {
+    console.error('Navigation error:', e);
+  }
+};
+
+
+</script>

@@ -1,0 +1,56 @@
+
+/* Transición SLIDE-RIGHT (para botón "Siguiente" o autoplay) */
+/* La nueva imagen entra desde la derecha */
+.slide-right-enter-from {
+    transform: translateX(100%);
+    opacity: 0.8; /* Opcional: para un efecto de fundido suave durante el deslizamiento */
+}
+/* La nueva imagen está completamente visible en su posición */
+.slide-right-enter-to {
+    transform: translateX(0);
+    opacity: 1;
+}
+/* La imagen antigua está visible en su posición antes de salir */
+.slide-right-leave-from {
+    transform: translateX(0);
+    opacity: 1;
+}
+/* La imagen antigua sale hacia la izquierda */
+.slide-right-leave-to {
+    transform: translateX(-100%);
+    opacity: 0.8; /* Opcional */
+}
+
+
+/* Transición SLIDE-LEFT (para botón "Anterior") */
+/* La nueva imagen entra desde la izquierda */
+.slide-left-enter-from {
+    transform: translateX(-100%);
+    opacity: 0.8; /* Opcional */
+}
+/* La nueva imagen está completamente visible en su posición */
+.slide-left-enter-to {
+    transform: translateX(0);
+    opacity: 1;
+}
+/* La imagen antigua está visible en su posición antes de salir */
+.slide-left-leave-from {
+    transform: translateX(0);
+    opacity: 1;
+}
+/* La imagen antigua sale hacia la derecha */
+.slide-left-leave-to {
+    transform: translateX(100%);
+    opacity: 0.8; /* Opcional */
+}
+
+/* Tus estilos de fade originales (pueden quedarse si los necesitas para otra cosa) */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s ease-in-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
