@@ -1,7 +1,7 @@
 <template>
     <div class="relative bg-blue-600 h-[500px] w-screen overflow-hidden">
         <div class="absolute inset-0 z-0 overflow-hidden">
-            <img :src="Guacamayas" class="object-cover w-full h-full" alt="Background Image">
+            <img :src="fondo" class="object-cover w-full h-full" alt="Background Image">
         </div>
         <div class="absolute inset-0 bg-white opacity-50"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-white to-transparent"></div>
@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import Guacamayas from '../assets/fondo2.jpg';
+import fondo from '../assets/fondo6.png';
 import { IconChevronRight } from '@tabler/icons-vue';
 import { defineProps } from 'vue';
 

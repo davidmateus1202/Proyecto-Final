@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Abscisa extends Model
 {
-    protected $fillable = ['name', 'number_of_abscisas' , 'project_id', 'status'];
+    protected $fillable = ['name', 'number_of_abscisas' , 'project_id', 'status', 'user_id'];
 
     
     public function slabs()

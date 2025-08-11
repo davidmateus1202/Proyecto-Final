@@ -5,7 +5,7 @@
         <section class="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
           <img
             alt=""
-            src="https://www.utb.edu.co/wp-content/uploads/2024/06/13-consejos-antes-de-estudiar-Ingenieria-Civil-para-iniciar-tu-viaje-universitario-con-exito.png"
+            :src="fondo1"
             class="absolute inset-0 h-full w-full object-cover opacity-80"
           />
     
@@ -117,6 +117,7 @@
   import { ref } from 'vue';
   import { useRouter } from "vue-router";
   import AlertError from '../Components/Alert/AlertError.vue';
+  import fondo1 from '../assets/fondo1.png';
 
   const route = useRouter();
 

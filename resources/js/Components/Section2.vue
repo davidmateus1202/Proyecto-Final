@@ -13,9 +13,9 @@
                 class="card-rotate-item"/>
         </div>
 
-        <div class="flex flex-col lg:flex-row items-center justify-start w-full gap-10 px-0 xl:px-36">
-            <img :src="icon10" class="xl:w-[20%] object-cover translate-y-2 hover:translate-y-0 transition-transform duration-300 ease-in-out group-hover:rotate-3 hover:scale-95">
-            <div class="flex flex-col flex-1 items-start justify-center lg:justify-start">
+        <div class="flex flex-col lg:flex-row items-center justify-start w-full gap-10 px-5 md:px-20 lg:px-36 xl:px-48 mt-10">
+            <img :src="icon10" class="xl:w-[30%] object-cover translate-y-2 hover:translate-y-0 transition-transform duration-300 ease-in-out group-hover:rotate-3 hover:scale-95">
+            <div class="flex flex-col flex-1 items-start justify-center lg:justify-start ">
                 <h1 class="font-semibold text-4xl">Innovación tecnológica para la inspección y diagnóstico de pavimentos viales!</h1>
                 <p class="mt-10 text-left font-light">Este proyecto de grado presenta una solución tecnológica multiplataforma diseñada para optimizar el proceso de inspección de pavimentos rígidos en tramos viales. A través de una aplicación móvil, los inspectores pueden registrar en campo todas las patologías observadas —como fisuras, desprendimientos o fallas estructurales— de manera rápida, ordenada y georreferenciada. Esta información se sincroniza automáticamente con una plataforma web, lo que garantiza una recopilación de datos precisa, eficiente y accesible para su posterior análisis.</p>
                 <p class="mt-10 text-left font-light">Una vez consolidada la información, el sistema permite que un ingeniero civil acceda a todos los registros desde un entorno centralizado, donde puede realizar un diagnóstico técnico del estado del tramo vial. Gracias a las herramientas de visualización y generación de reportes, se facilita la toma de decisiones sobre mantenimiento, rehabilitación o intervención. En conjunto, este sistema contribuye a modernizar la gestión de infraestructura vial, apoyando procesos técnicos con tecnología accesible y adaptable al contexto colombiano.</p>
@@ -36,10 +36,10 @@ import icon2 from '../assets/icon2.png';
 import icon3 from '../assets/icon3.png';
 import icon4 from '../assets/icon4.png';
 
-import fondo1 from '../assets/fondo1.jpg';
-import fondo2 from '../assets/fondo2.jpg';
-import fondo3 from '../assets/fondo3.jpg';
-import fondo4 from '../assets/fondo4.jpg';
+import fondo1 from '../assets/fondo1.png';
+import fondo2 from '../assets/fondo2.png';
+import fondo3 from '../assets/fondo3.png';
+import fondo4 from '../assets/fondo4.png';
 
 const cardsContainer = ref(null);
 let observer = null;

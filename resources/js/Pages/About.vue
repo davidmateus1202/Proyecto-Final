@@ -1,9 +1,9 @@
 <template>
-    <div class="flex flex-col items-center justify-center w-full h-auto min-h-screen">
+    <div class="flex flex-col items-center justify-center w-full h-auto min-h-screen overflow-hidden">
         <NavBar />
         <Header title="Sobre Nosotros" />
         <Section2 />
-        <Footer />
+        <Footer class="w-full" />
     </div>
 </template>
 

@@ -27,7 +27,9 @@ class AbscisaController extends Controller
             400);
         }
 
-        $abscisas = Abscisa::where('project_id', $request->project_id)->paginate(10);
+        $abscisas = Abscisa::where('project_id', $request->project_id)
+            ->where('user_id', $request->user()->id)
+            ->paginate(10);
 
         return response()->json([
             'success' => true,
@@ -58,7 +60,8 @@ class AbscisaController extends Controller
         $abscisa = Abscisa::create([
             'name' => $request->name,
             'number_of_abscisas' => $request->number_of_abscisas,
-            'project_id' => $request->project_id
+            'project_id' => $request->project_id,
+            'user_id' => $request->user()->id,
         ]);
 
         return response()->json([
