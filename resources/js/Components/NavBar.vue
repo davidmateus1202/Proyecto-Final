@@ -138,8 +138,4 @@ watch(isMobileMenuOpen, (isOpen) => {
     }
 });
 
-const openWindow = (url) => {
-    window.open(url, '_blank');
-};
-
 </script>
