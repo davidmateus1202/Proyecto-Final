@@ -7,6 +7,7 @@ import Login from '../Pages/Login.vue';
 import Error from '../Error/Error.vue';
 import ProjectDetails from '../Pages/ProjectDetails.vue';
 import About from '../Pages/About.vue';
+import Project from '../Pages/Project.vue';
 
 const routes = [
     {
@@ -33,12 +34,21 @@ const routes = [
         path: '/about',
         name: 'About',
         component: About
+    },
+    {
+        path: '/project',
+        name: 'Project',
+        component: Project
     }
 ]
 
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes,
+
+    scrollBehavior(to, from, savedPosition) {
+        return { top: 0 };
+    }
 })
 
 router.beforeEach((to, from, next) => {
