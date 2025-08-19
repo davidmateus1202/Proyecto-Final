@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\URL;
+use App\Models\Abscisa;
 
 class ProjectController extends Controller
 {
@@ -99,8 +100,14 @@ class ProjectController extends Controller
             ]);
     
             if ($validated->fails()) return response()->json($validated->errors(), 400);
-    
-            $project = Project::with('abscisaInProgress')->find($request->project_id);
+
+            $userId = Auth::id();
+
+            $project = Project::with([
+                'abscisaInProgress' => function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                }
+            ])->find($request->project_id);
             
             if (!$project) return response()->json(['message' => 'Project not found'], 404);
 
@@ -114,6 +121,54 @@ class ProjectController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error getting project details',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * register a new collaborator into a project
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function registerCollaborator(Request $request) : JsonResponse
+    {
+        $validated = Validator::make($request->all(), [
+            'project_id' => 'required|integer',
+        ]);
+
+        if ($validated->fails()) return response()->json($validated->errors(), 400);
+
+        $user = Auth::user();
+
+        try {
+
+            $project = Project::find($request->project_id);
+
+            if (!$project) return response()->json(['message' => 'Projecto no encontrado'], 404);
+
+            $team = UserProject::where('project_id', $request->project_id)
+                ->where('user_id', $user->id)
+                ->first();
+    
+            if ($team) {
+                return response()->json(['message' => 'Ya está registrado como colaborador en este proyecto'], 400);
+            }
+
+            $userProject = UserProject::create([
+                'user_id' => $user->id,
+                'project_id' => $request->project_id,
+            ]);
+
+            if (!$userProject) {
+                return response()->json(['message' => 'Error registering collaborator'], 500);
+            }
+
+            return response()->json(['message' => 'Colaborador registrado con éxito'], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error registering collaborator',
                 'error' => $e->getMessage()
             ], 500);
         }

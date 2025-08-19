@@ -47,7 +47,6 @@ const closeDropdown = () => {
 }
 
 onMounted(() => {
-    console.log(projectStore.slabSelected);
     latitude.value = parseFloat(projectStore.slabSelected.latitude);
     longitude.value = parseFloat(projectStore.slabSelected.longitude);
     initMap();

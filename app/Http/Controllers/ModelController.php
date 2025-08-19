@@ -39,7 +39,7 @@ class ModelController extends Controller
             $url = env('API_URL_MODEL');
 
             $response = Http::post($url, [
-                'image_url' => 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCQp-kWIajo0Ocdmu5nZ5ign_3v5Fl1uoMuA&s'
+                'image_url' => $url_image,
             ]);
 
             if ($response->status() != 200) {

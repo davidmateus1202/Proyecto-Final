@@ -202,4 +202,29 @@ class AbscisaController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * 
+     * Change status
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function changeStatusAbscisa(Request $request) : JsonResponse
+    {
+        $validated = Validator::make($request->all(), [
+            'abscisa_id' => 'required',
+            'status' => 'required'
+        ]);
+
+        if ($validated->fails()) return response()->json($validated->errors(), 400);
+
+        $abscisa = Abscisa::where('id', $request->abscisa_id)->first();
+
+        if (!$abscisa) return response()->json(['message' => 'Abscisa not found'], 404);
+
+        $abscisa->status = 'finished';
+        $abscisa->save();
+
+        return response()->json(['message' => 'Abscisa status updated successfully'], 200);
+    }
 }

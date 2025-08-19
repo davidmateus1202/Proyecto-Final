@@ -18,6 +18,7 @@ Route::prefix('project')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [ProjectController::class, 'index']);
     Route::post('/create', [ProjectController::class, 'create']);
     Route::post('/show/detail', [ProjectController::class, 'showDetails']);
+    Route::post('/register-new-collaborator', [ProjectController::class, 'registerCollaborator']);
 });
 
 Route::prefix('abscisa')->middleware('auth:sanctum')->group(function () {
@@ -25,6 +26,7 @@ Route::prefix('abscisa')->middleware('auth:sanctum')->group(function () {
     Route::post('/create', [AbscisaController::class, 'create']);
     Route::delete('/delete', [AbscisaController::class, 'delete']);
     Route::get('/chart/show/{abscisa_id}', [AbscisaController::class, 'getChartData']);
+    Route::post('change/status', [AbscisaController::class, 'changeStatusAbscisa']);
 });
 
 Route::prefix('slab')->middleware('auth:sanctum')->group(function () {
