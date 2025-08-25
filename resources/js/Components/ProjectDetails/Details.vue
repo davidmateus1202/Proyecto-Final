@@ -77,10 +77,10 @@
                             </td>
 
                             <td class="flex items-center justify-center">
-                                <div
+                                <button @click="toggleModalPhoto(pathology.url_image)"
                                     class="flex w-8 h-8 bg-gray-100 items-center justify-center mb-5 rounded-full shadow-sm cursor-pointer hover:bg-gray-200">
                                     <i class="pi pi-angle-down"></i>
-                                </div>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -108,9 +108,9 @@
 
                             <td class="text-center">
                             <div class="flex w-full h-full items-center justify-center">
-                                    <div class="flex w-8 h-8 bg-gray-100 items-center justify-center mb-5 rounded-full shadow-sm cursor-pointer hover:bg-gray-200">
+                                    <button @click="toggleModalPhoto(pathology.url_image)" class="flex w-8 h-8 bg-gray-100 items-center justify-center mb-5 rounded-full shadow-sm cursor-pointer hover:bg-gray-200">
                                         <i class="pi pi-angle-down"></i>
-                                    </div>
+                                    </button>
                             </div>
                             </td>
                         </tr>
@@ -140,6 +140,7 @@
     <FilterDropdown v-if="showFilter" :position="position" @close="closeDropdown" />
     <AlertError v-if="isErrorMessage" class="absolute top-0 left-0 right-0 mx-auto w-96"/>
     <ModalGoogleMaps v-if="showMap" @close="toogleMap" />
+    <ModalPhoto v-if="showPhoto" :imageUrl="selectedImageUrl" @close="closePhotoModal" />
 
 
 
@@ -157,6 +158,7 @@ import icon8 from '../../assets/icon8.png';
 import icon9 from '../../assets/icon9.png';
 import AlertError from '../Alert/AlertError.vue';
 import ModalGoogleMaps from './ModalGoogleMaps.vue';
+import ModalPhoto from './ModalPhoto.vue';
 
 const projectStore = useProjectStore()
 const isLoading = ref(false);
@@ -166,11 +168,23 @@ const position = ref({ top: 0, left: 0 });
 const showFilter = ref(false);
 const isErrorMessage = ref(false);
 const showMap = ref(false);
+const showPhoto = ref(false);
+const selectedImageUrl = ref('');
 
+const toggleModalPhoto = (imageUrl) => {
+    selectedImageUrl.value = imageUrl;
+    showPhoto.value = !showPhoto.value;
+}
+
+const closePhotoModal = () => {
+    showPhoto.value = false;
+    selectedImageUrl.value = '';
+}
 
 onMounted(async () => {
     isLoading.value = true;
     await projectStore.getChartAbscisaDetails(projectStore.abscisaSelected.id);
+    console.log(projectStore.abscisaSelected);
     if (projectStore.abscisaSelected.slabs_with_pathologies.length > 0) {
         projectStore.setPlacaSelectedId(projectStore.abscisaSelected.slabs_with_pathologies[0].id);
     } else {
@@ -203,7 +217,6 @@ const toggleFilterDropdown = async () => {
         if (filterButton.value) {
             // Verifica las dimensiones del botón
             const positionValue = filterButton.value.getBoundingClientRect();
-            console.log(positionValue); // Verifica las coordenadas
             position.value = {
                 top: positionValue.bottom + window.scrollY + 8,
                 left: positionValue.left + window.scrollX - 150
