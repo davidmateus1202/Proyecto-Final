@@ -34,7 +34,7 @@
                     <li v-for="link in navLinks" :key="link.name">
                         <button @click="handleNavLinkClick(link.name)" :class="[
                             'block py-2 px-3 rounded-sm md:bg-transparent md:p-0 cursor-pointer transition-colors duration-200',
-                            isScrolled ? 'text-black hover:text-teal-600 md:hover:bg-transparent' : 'text-white hover:text-gray-300 md:hover:bg-transparent'
+                            isScrolled ? 'text-black hover:text-teal-600 md:hover:bg-transparent' : 'text-gray-300 hover:text-gray-300 md:hover:bg-transparent'
                         ]">
                             {{ link.label }}
                         </button>
