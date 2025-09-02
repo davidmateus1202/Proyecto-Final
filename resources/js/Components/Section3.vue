@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import fondo4 from '../assets/fondo4.jpg';
+import fondo4 from '../assets/fondo4.webp';
 import CardDetails from './CardDetails.vue';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { gsap } from 'gsap';

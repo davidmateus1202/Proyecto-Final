@@ -5,9 +5,9 @@ import Home from '../Pages/Home.vue';
 import Welcome from '../Pages/Welcome.vue';
 import Login from '../Pages/Login.vue';
 import Error from '../Error/Error.vue';
-import ProjectDetails from '../Pages/ProjectDetails.vue';
 import About from '../Pages/About.vue';
 import Project from '../Pages/Project.vue';
+import ProjectResult from '../Pages/ProjectResult.vue';
 
 const routes = [
     {
@@ -39,6 +39,11 @@ const routes = [
         path: '/project',
         name: 'Project',
         component: Project
+    },
+    {
+        path: '/project/result/:id',
+        name: 'ProjectResult',
+        component: ProjectResult
     }
 ]
 

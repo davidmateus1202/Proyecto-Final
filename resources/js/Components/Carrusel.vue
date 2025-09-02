@@ -16,7 +16,7 @@
 
         <div class="relative z-20 flex flex-col items-center justify-center h-full">
             <h1 class="text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-semibold text-center text-white mb-5 md:mb-0">Evaluación Vial Asistida por <br> Inteligencia Artificial</h1>
-            <p class="hidden md:block mt-4 text-sm md:text-lg text-white font-semibold mb-5">Sistema basado en inteligencia artificial para la detección, clasificación y diagnóstico de daños en tramos viales.</p>
+            <p class="hidden md:block mt-4 text-sm md:text-lg text-white font-semibold mb-5">Sistema basado en inteligencia artificial para la detección, <br /> clasificación y diagnóstico de daños en tramos viales.</p>
             <Button :action="() => navigateTo('Reserve')" :text="'R e s e r v a r'" />
         </div>
 
@@ -49,9 +49,9 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import Button from './Button.vue'; // Asegúrate que la ruta es correcta
-import fondo1 from '../assets/fondo1.png';
-import fondo2 from '../assets/fondo2.png';
-import fondo3 from '../assets/fondo3.png';
+import fondo1 from '../assets/fondo1.webp';
+import fondo2 from '../assets/fondo2.webp';
+import fondo3 from '../assets/fondo3.webp';
 import { useRouter } from 'vue-router'; // Importa useRouter si necesitas navegación
 import '../CSS/Carrusel.css';
 

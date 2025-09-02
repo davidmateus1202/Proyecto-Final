@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col top-0 left-0 w-full min-h-screen h-auto bg-white items-center justify-start p-10">
-        <h1 class="text-4xl font-semibold text-center">Bowlix: Where Fun ans Flavor Collide</h1>
-        <span class="text-center mt-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</span>
+        <h1 class="text-4xl font-semibold text-center">Proyectos de Investigación en Pavimentos Rígidos</h1>
+        <span class="text-center mt-2">Presentamos investigaciones centradas en diagnosticar las causas del deterioro del pavimento para proponer métodos de <br /> evaluación y rehabilitación que garanticen una mayor vida útil.</span>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-16 mt-10 gap-y-16">
             <PhotoCard v-for="(image, index) in images" 

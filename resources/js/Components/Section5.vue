@@ -23,10 +23,10 @@ import icon2 from '../assets/icon2.png';
 import icon3 from '../assets/icon3.png';
 import icon4 from '../assets/icon4.png';
 
-import fondo1 from '../assets/fondo1.png';
-import fondo2 from '../assets/fondo2.png';
-import fondo3 from '../assets/fondo3.png';
-import fondo4 from '../assets/fondo4.png';
+import fondo1 from '../assets/fondo1.webp';
+import fondo2 from '../assets/fondo2.webp';
+import fondo3 from '../assets/fondo3.webp';
+import fondo4 from '../assets/fondo4.webp';
 
 const imageIcons = [
     {

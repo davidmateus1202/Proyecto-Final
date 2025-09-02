@@ -184,5 +184,5 @@
 </template>
 
 <script setup>
-import Fondo from '../assets/fondo.jpg';
+import Fondo from '../assets/fondo6.webp';
 </script>

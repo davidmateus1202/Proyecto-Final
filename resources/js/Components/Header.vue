@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import fondo from '../assets/fondo6.png';
+import fondo from '../assets/fondo6.webp';
 import { IconChevronRight } from '@tabler/icons-vue';
 import { defineProps } from 'vue';
 
