@@ -8,6 +8,7 @@ import Error from '../Error/Error.vue';
 import About from '../Pages/About.vue';
 import Project from '../Pages/Project.vue';
 import ProjectResult from '../Pages/ProjectResult.vue';
+import axios from 'axios';
 
 const routes = [
     {
@@ -56,9 +57,26 @@ const router = createRouter({
     }
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
+
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        try {
+            const response = await axios.get('/api/validate-token', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.data.status === 'success') {
+                return next();
+            }
+            return next({ name: 'Login' });
+
+        } catch (e) {
+            console.error(e);
+            return next({ name: 'Login' });
+        }
+    }
 
     if (to.matched.some(record => record.meta.requiresAuth) && !token) {
         return next({ name: 'Login' });

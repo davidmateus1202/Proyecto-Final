@@ -78,7 +78,7 @@
             </div>
         </div>
     </div>
-
+    <Loading v-if="showLoadingScreen" :is-actually-loading="!allComponentsReady" />
 </template>
 
 <script setup>
@@ -86,10 +86,17 @@ import { IconChartCovariate } from '@tabler/icons-vue';
 import { IconCards } from '@tabler/icons-vue';
 import { IconAlertTriangle } from '@tabler/icons-vue';
 import CarruselAbscisa from '../Components/CarruselAbscisa.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import Loading from './Loading.vue';
 
 const containerRefs = ref([]);
 const containersGrid = ref(null);
+const isAnimating = ref(false);
+const allComponentsReady = ref(false)
+const showLoadingScreen = ref(true)
+
+const FADE_OUT_DURATION_LOADING_ELEMENTS = 0.2;
+const EXPANSION_DURATION_LOADING = 0.7;
 
 const containers = ref([
     { description: 'Análisis principal', animated: false },
@@ -97,6 +104,25 @@ const containers = ref([
     { description: 'Estadísticas', animated: false },
     { description: 'Resultados', animated: false }
 ]);
+
+onMounted(async() => {
+    showLoadingScreen.value = true;
+    allComponentsReady.value = false;
+    console.log("HomePage: Montado, iniciando carga simulada...");
+    await new Promise(resolve => setTimeout(resolve, 3500));
+
+    console.log("HomePage: Carga de componentes/datos terminada.");
+    allComponentsReady.value = true; 
+
+    const totalLoadingTransitionTime = FADE_OUT_DURATION_LOADING_ELEMENTS + EXPANSION_DURATION_LOADING;
+
+    setTimeout(() => {
+        console.log("HomePage: Ocultando pantalla de carga.");
+        showLoadingScreen.value = false; // Desmonta Loading.vue y muestra el contenido
+    }, (totalLoadingTransitionTime * 1000) + 100); // Multiplicar por 1000 para ms y añadir un pequeño buffer (100ms)
+
+    handleCarouselClick();
+}) 
 
 const getContainerClasses = (index) => {
     const baseColors = [

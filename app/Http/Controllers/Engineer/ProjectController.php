@@ -127,6 +127,29 @@ class ProjectController extends Controller
     }
 
     /**
+     * get details project by id from route parameter
+     * @param request Request
+     * @return JsonResponse
+     */
+    public function showDetailsById(Request $request) : JsonResponse 
+    {
+        try {
+            $projectId = $request->route('id');
+            $project = Project::with('abscisas')->find($projectId);
+
+            if (!$project) return response()->json(['message' => 'Project not found'], 404);
+
+            return response()->json($project, 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error getting project details by id',
+                'error' => $e->getMessage()
+            ], 500);
+        } 
+    }
+
+    /**
      * register a new collaborator into a project
      * @param Request $request
      * @return JsonResponse
@@ -169,6 +192,28 @@ class ProjectController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error registering collaborator',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * get all project
+     */
+    public function getAllProjects() : JsonResponse
+    {
+        try {
+
+            $projects = Project::limit(4)->get();
+            
+            foreach ($projects as $project) {
+                $project->url = URL::asset($project->url);
+            }
+
+            return response()->json($projects, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error getting all projects',
                 'error' => $e->getMessage()
             ], 500);
         }

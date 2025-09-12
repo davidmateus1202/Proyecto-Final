@@ -8,6 +8,7 @@ use App\Http\Controllers\SlabsController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\PathologiesController;
 use App\Http\Controllers\Web\WebController;
+use Spatie\Permission\Contracts\Role;
 
 ///// -- API ROUTES FOR MOBIL -- /////
 Route::post('login', [AuthController::class, 'login']);
@@ -20,6 +21,9 @@ Route::prefix('project')->middleware('auth:sanctum')->group(function () {
     Route::post('/show/detail', [ProjectController::class, 'showDetails']);
     Route::post('/register-new-collaborator', [ProjectController::class, 'registerCollaborator']);
 });
+
+Route::get('/list/projects', [ProjectController::class, 'getAllProjects']);
+Route::get('/project/show/{id}', [ProjectController::class, 'showDetailsById']);
 
 Route::prefix('abscisa')->middleware('auth:sanctum')->group(function () {
     Route::get('/', [AbscisaController::class, 'index']);
@@ -48,4 +52,20 @@ Route::prefix('pathologie')->middleware('auth:sanctum')->group(function () {
 Route::prefix('web')->middleware('auth:sanctum')->group(function () {
     Route::get('/projects/index', [WebController::class, 'index']);
     Route::post('/projects/show', [WebController::class, 'getDetails']);
+});
+
+Route::middleware('auth:sanctum')->get('/validate-token', function () {
+    return response()->json([
+        'message' => 'Token is valid',
+        'status' => 'success'
+    ], 200);
+});
+
+Route::middleware('auth:sanctum')->get('/logout', function () {
+    auth()->user()->tokens()->delete();
+
+    return response()->json([
+        'message' => 'Logged out successfully',
+        'status' => 'success'
+    ], 200);
 });

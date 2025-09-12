@@ -1,15 +1,16 @@
 <template>
     <div class="flex flex-col top-0 left-0 w-full h-auto bg-white items-center justify-start p-10">
-        <h1 class="text-4xl font-semibold text-center">Bowlix: Where Fun ans Flavor Collide</h1>
-        <span class="text-center mt-2">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</span>
+        <h1 class="text-4xl font-semibold text-center">Proyectos de Investigación en Pavimentos Rígidos</h1>
+        <span class="text-center mt-2">Presentamos investigaciones centradas en diagnosticar las causas del deterioro del pavimento para proponer métodos de <br /> evaluación y rehabilitación que garanticen una mayor vida útil.</span>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-16 mt-10 gap-y-16">
             <Card 
-                v-for="(item, index) in imageIcons" 
-                :key="index" :icon="item.url" 
-                :fondo="item.urlBackground" 
-                :title="item.title" 
-                :description="item.description" 
+                v-for="(item, index) in projects" 
+                :key="index" :icon="imageIcons[index].url" 
+                :fondo="item.url" 
+                :title="item.name" 
+                :description="item.description"
+                :onclick="() => navigateTo(index)"
                 class="card-rotate-item"/>
         </div>
     </div>
@@ -27,6 +28,9 @@ import fondo1 from '../assets/fondo1.webp';
 import fondo2 from '../assets/fondo2.webp';
 import fondo3 from '../assets/fondo3.webp';
 import fondo4 from '../assets/fondo4.webp';
+import { onMounted, ref } from 'vue';
+import { useProjectStore } from '../store/projectStore';
+import { useRouter } from 'vue-router';
 
 const imageIcons = [
     {
@@ -58,5 +62,17 @@ const imageIcons = [
         description: 'Este proyecto busca modernizar el proceso de inspección y diagnóstico de infraestructura vial en Colombia mediante el uso de tecnologías móviles y web.'
     }
 ]
+
+const projectStore = useProjectStore();
+const projects = ref([]);
+const router = useRouter();
+
+onMounted(async () => {
+    projects.value = await projectStore.getAllProjects();
+})
+
+const navigateTo = (id) => {
+    router.push({ name: 'ProjectResult', params: { id } });
+}
 
 </script>

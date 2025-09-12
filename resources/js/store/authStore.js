@@ -22,7 +22,6 @@ import { defineStore } from "pinia";
                     this.user = response.data.user;
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('role', response.data.role[0]);
-                    this.authUser = true;
                     return true;
                 }
 
@@ -36,6 +35,23 @@ import { defineStore } from "pinia";
 
             }
 
+        },
+
+        /**
+         * Logout the user by clearing local storage and resetting state.
+         */
+        async logout() {
+            try {
+                await axios.get('/api/logout', {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                localStorage.removeItem('token');
+                localStorage.removeItem('role');
+                this.user = {};
+                this.authUser = false;
+            } catch (e) {
+                console.log(e)
+            }
         }
     },
     persist: true

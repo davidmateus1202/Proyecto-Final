@@ -22,7 +22,7 @@ export const useProjectStore = defineStore('project', {
     // metodos para obtener los proyectos
     actions: {
         /**
-        * Get all projects
+        * Get all projects by user
          * @returns {Promise<void>} - A promise that resolves when the projects are fetched successfully.
          */
         async getProjects() {
@@ -40,6 +40,21 @@ export const useProjectStore = defineStore('project', {
                 console.log(error);
             } finally {
                 this.loading = false;
+            }
+        },
+
+        /**
+         * get all projects
+         */
+        async getAllProjects() {
+            try {
+                const response = await axios.get('/api/list/projects')
+                if (response.status === 200) {
+                    console.log(response.data);
+                    return response.data;
+                }
+            } catch (e) {
+                console.log(e)
             }
         },
 

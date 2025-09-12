@@ -17,11 +17,12 @@
         </div>
 
         <!-- Parte inferior (Ajustes y Perfil) -->
-        <div class="hidden md:flex flex-col justify-center items-center gap-3">
+        <div class="flex flex-col justify-center items-center gap-3 mr-5">
             <button @click="logout" class="hover:rounded-3xl group">
-                <img :src="logoutIcon" class="w-8">
+                <img v-if="loading === false" :src="logoutIcon" class="w-8">
+                <i v-else class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
             </button>
-            <img class="rounded-full w-10 h-10 border border-spacing-2"
+            <img class="hidden md:block rounded-full w-10 h-10 border border-spacing-2"
                 src="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
                 alt="profile" />
         </div>
@@ -39,15 +40,18 @@ import icon3 from '../assets/icon3.png';
 import logoutIcon from '../assets/logout.png';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../store/authStore';
+import { ref } from 'vue';
 
+const loading = ref(false);
 const route = useRouter();
 const auth = useAuthStore();
 
 
-const logout = () => {
-    auth.authUser = false;
-    localStorage.removeItem('token');
+const logout = async () => {
+    loading.value = true;
+    await auth.logout();
     route.push({ name: 'Login' });
+    loading.value = false;
 }
 
 </script>
