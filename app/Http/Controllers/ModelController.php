@@ -38,7 +38,7 @@ class ModelController extends Controller
             //url de la peticion
             $url = env('API_URL_MODEL');
             $response = Http::post($url, [
-                'url' => $url_image,
+                'image' => $url_image,
             ]);
 
             if ($response->status() != 200) {

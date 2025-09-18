@@ -76,7 +76,7 @@ import { useAuthStore } from '../store/authStore';
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import AlertError from '../Components/Alert/AlertError.vue';
-import fondo1 from '../assets/fondo1.png';
+import fondo1 from '../assets/fondo1.webp';
 import NavBar from '../Components/NavBar.vue';
 
 const route = useRouter();

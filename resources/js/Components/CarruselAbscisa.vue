@@ -45,9 +45,6 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import fondo1 from '../assets/fondo1.png';
-import fondo2 from '../assets/fondo2.png';
-import fondo3 from '../assets/fondo3.png';
 import { useRouter } from 'vue-router'; // Importa useRouter si necesitas navegación
 import '../CSS/Carrusel.css';
 
