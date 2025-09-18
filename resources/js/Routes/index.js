@@ -9,6 +9,7 @@ import About from '../Pages/About.vue';
 import Project from '../Pages/Project.vue';
 import ProjectResult from '../Pages/ProjectResult.vue';
 import axios from 'axios';
+import { useAuthStore } from '../store/authStore';
 
 const routes = [
     {
@@ -58,23 +59,32 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+    const authStore = useAuthStore();
+
     const token = localStorage.getItem('token');
     const role = localStorage.getItem('role');
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
         try {
-            const response = await axios.get('/api/validate-token', {
+
+            if (!token) {
+                authStore.authUser = false;
+                return next({ name: 'Login' });
+            }
+
+            await axios.get('/api/validate-token', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
-            if (response.data.status === 'success') {
-                return next();
-            }
-            return next({ name: 'Login' });
+            return next();
 
         } catch (e) {
-            console.error(e);
-            return next({ name: 'Login' });
+            if (e.response && e.response.status === 401) {
+                localStorage.removeItem('token');
+                authStore.authUser = false;
+                return next({ name: 'Login' });
+            }
+            next(false);
         }
     }
 

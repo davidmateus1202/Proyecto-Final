@@ -5,7 +5,7 @@
                 :name="transitionName">
                 <div class="flex flex-col w-full h-full bg-black/70 items-start justify-end p-5">
                     <h1 class="text-black font-bold text-4xl md:text-6xl">{{ currentImage.name }}</h1>
-                    <span class="text-white">{{ currentImage.description }}</span>
+                    <span class="text-white">Abscisa compuesta por {{ currentImage.slabs_with_pathologies.length }} placas</span>
                 </div>
             </transition>
         </div>
@@ -48,38 +48,39 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import '../CSS/Carrusel.css';
 
-const data = ref([
-    { name: 'Abscisa 10', description: 'Descripción de la imagen 10' },
-    { name: 'Abscisa 20', description: 'Descripción de la imagen 20' },
-    { name: 'Abscisa 30', description: 'Descripción de la imagen 30' },
-]);
+const props = defineProps({
+    data: {
+        type: Array,
+        required: true,
+        default: () => [],
+    },
+}); 
 
 const router = useRouter(); // Inicializa el router si necesitas navegación
 const currentIndex = ref(0);
 const intervalId = ref(null);
-const transitionDuration = 5000; // Duración del intervalo para cambio automático
+const transitionDuration = 8000; // Duración del intervalo para cambio automático
 const animationDuration = 0.7; // Duración de la animación CSS en segundos
 
 const transitionName = ref('slide-right'); // Nombre de la transición (slide-left o slide-right)
 
-const currentImage = computed(() => data.value[currentIndex.value]);
+const currentImage = computed(() => props.data[currentIndex.value]);
+const emit = defineEmits(['abscisaSelected']);
 
 const resetInterval = () => {
     if (intervalId.value) {
         clearInterval(intervalId.value);
     }
-    if (data.value.length > 1) {
+    if (props.data.length > 1) {
         intervalId.value = setInterval(() => {
-            // Para el autoplay, siempre deslizamos como si fuera "siguiente"
-            transitionName.value = 'slide-right';
-            currentIndex.value = (currentIndex.value + 1) % data.value.length;
+            nextImage();
         }, transitionDuration);
     }
 };
 
 // Función genérica para ir a una imagen, estableciendo la dirección de la transición
 const goToImage = (index, direction) => {
-    if (currentIndex.value === index && data.value.length > 1) return; // No hacer nada si es la misma imagen, a menos que sea la única
+    if (currentIndex.value === index && props.data.length > 1) return; // No hacer nada si es la misma imagen, a menos que sea la única
 
     transitionName.value = direction;
     currentIndex.value = index;
@@ -87,12 +88,14 @@ const goToImage = (index, direction) => {
 };
 
 const nextImage = () => {
-    const newIndex = (currentIndex.value + 1) % data.value.length;
+    const newIndex = (currentIndex.value + 1) % props.data.length;
+    emit('abscisaSelected', newIndex);
     goToImage(newIndex, 'slide-right');
 };
 
 const prevImage = () => {
-    const newIndex = (currentIndex.value - 1 + data.value.length) % data.value.length;
+    const newIndex = (currentIndex.value - 1 + props.data.length) % props.data.length;
+    emit('abscisaSelected', newIndex);
     goToImage(newIndex, 'slide-left');
 };
 

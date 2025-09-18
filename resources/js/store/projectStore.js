@@ -15,7 +15,8 @@ export const useProjectStore = defineStore('project', {
             damageArea: [],
             placaSelectedId: null,
             pathologies: [],
-            slabSelected: null
+            slabSelected: null,
+            projectDetailsPublic: []
         }
     },
 
@@ -79,6 +80,22 @@ export const useProjectStore = defineStore('project', {
                 console.log(error);
             } finally {
                 this.projectDetailsLoading = false;
+            }
+        },
+
+        /**
+         * Get public details of a project.
+         * @param {number} id - The ID of the project to fetch public details for.
+         */
+        async getProjectDetailsPublic(id) {
+            try {
+                const response = await axios.get(`/api/project/show/${id}`);
+                if (response.status === 200) {
+                    this.projectDetailsPublic = response.data;
+                    console.log(this.projectDetailsPublic);
+                }
+            } catch (error) {
+                console.log(error);
             }
         },
 

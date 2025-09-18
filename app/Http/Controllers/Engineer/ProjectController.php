@@ -137,6 +137,8 @@ class ProjectController extends Controller
             $projectId = $request->route('id');
             $project = Project::with('abscisas')->find($projectId);
 
+            $project->url = URL::asset($project->url);
+
             if (!$project) return response()->json(['message' => 'Project not found'], 404);
 
             return response()->json($project, 200);
