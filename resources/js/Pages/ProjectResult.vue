@@ -1,28 +1,39 @@
 <template>
     <div v-if="projectStore.projectDetailsPublic.abscisas?.length > 0"
         class="flex flex-col items-center justify-center w-full h-auto">
-        <div class="relative md:hidden h-[500px] w-screen overflow-hidden">
-            <div class="absolute inset-0 z-0 overflow-hidden">
-                <img :src="fondoUrl" @error="setFallbackFondo" alt="image_project" class="w-full h-full object-cover" />
-            </div>
-            <div class="absolute inset-0 bg-black opacity-50"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-            <div class="relative z-10 flex flex-col items-start justify-center h-full px-5 sm:px-12">
-                <h1 class="text-4xl sm:text-6xl font-bold text-white">{{ projectStore.projectDetailsPublic.name }}</h1>
-                <p class="mt-2 text-sm sm:text-lg text-white">{{ projectStore.projectDetailsPublic.description }}</p>
-                <div class="mt-2 bg-white p-2 rounded-full px-4">
-                    <span class="text-black">Pavimento rigido</span>
+        <!-- CÓDIGO MEJORADO PARA EL BANNER -->
+        <div class="relative w-full h-[500px] md:h-[600px] overflow-hidden text-white">
+
+            <!-- 1. Imagen de Fondo -->
+            <img :src="fondoUrl" @error="setFallbackFondo" alt="image_project"
+                class="absolute inset-0 w-full h-full object-cover z-0" />
+
+            <!-- 2. Gradiente Inteligente para Legibilidad -->
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+
+            <!-- 3. Contenedor del Texto (con animación) -->
+            <div class="relative z-20 h-full flex flex-col justify-end p-6 sm:p-12 md:p-24 pb-12 md:pb-20">
+
+                <!-- Contenedor para aplicar la animación en cascada -->
+                <div class="animate-fade-in-up flex flex-col gap-y-4 items-start">
+
+                    <!-- Título Principal -->
+                    <h1 class="text-5xl md:text-7xl font-bold tracking-tighter" style="animation-delay: 0.2s;">
+                        {{ projectStore.projectDetailsPublic.name }}
+                    </h1>
+
+                    <!-- Descripción -->
+                    <p class="text-lg md:text-xl text-white/80 max-w-lg" style="animation-delay: 0.4s;">
+                        {{ projectStore.projectDetailsPublic.description }}
+                    </p>
+
+                    <!-- Tag con efecto Vidrio -->
+                    <div class="mt-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 text-sm font-medium"
+                        style="animation-delay: 0.6s;">
+                        <span>Pavimento Rígido</span>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="hidden md:flex w-full h-[500px] bg-gray-200 items-center justify-between pl-32 xl:pl-52">
-            <div class="flex flex-col">
-                <h1 class="text-7xl font-bold">{{ projectStore.projectDetailsPublic.name }}</h1>
-                <span class="text-gray-600 mt-2">{{ projectStore.projectDetailsPublic.description }}</span>
-            </div>
-            <img :src="fondoUrl" @error="setFallbackFondo" alt="image_project" class="w-full h-[500px] object-cover"
-                style="clip-path: polygon(39% 0, 100% 0%, 100% 100%, 0% 100%);" />
         </div>
 
         <div class="flex flex-col w-full h-auto p-12 md:p-32 xl:p-52">
@@ -64,16 +75,15 @@
             <h1 class="text-2xl sm:text-4xl font-bold">Estadisticas del estudio</h1>
             <span class="text-gray-600 text-sm sm:text-base">Detalles del estudio con base en la recolección de datos
                 obtenidos.</span>
-            <div class="w-full flex flex-col lg:flex-row justify-center items-center mt-10 gap-x-10">
+            <div class="w-full flex flex-col lg:flex-row justify-center items-center my-10 gap-x-10">
                 <CarruselAbscisa @abscisaSelected="updateSlabsForAbscisa"
                     :data="projectStore.projectDetailsPublic.abscisas" />
                 <div ref="containersGrid" class="w-full md:w-1/2 h-full grid grid-cols-1 gap-4 md:grid-cols-2">
 
-                    <div v-for="(slab, index) in containers" :key="slab.id" ref="containerRefs"
-                        :class="[
+                    <div v-for="(slab, index) in containers" :key="slab.id" ref="containerRefs" :class="[
                         'group relative w-full h-[280px] rounded-2xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl p-5 flex flex-col justify-between overflow-hidden',
                         getContainerClasses(index) // Esto aplica su fondo degradado que ya tenía
-                        ]">
+                    ]">
 
                         <!-- Capa de efecto Vidrio Oscuro -->
                         <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm z-0"></div>
@@ -275,8 +285,31 @@ const handleData = async () => {
 }
 
 const setFallbackFondo = () => {
-    console.log(fondoUrl.value);
-    fondoUrl.value = 'https://edteam-media.s3.amazonaws.com/blogs/big/2ab53939-9b50-47dd-b56e-38d4ba3cc0f0.png';
+    fondoUrl.value = 'https://media.licdn.com/dms/image/v2/C5112AQEw1fXuabCTyQ/article-inline_image-shrink_1500_2232/article-inline_image-shrink_1500_2232/0/1581099611064?e=1762387200&v=beta&t=REpmuD079v2zeL6abmBTpKs3_aCCap9CjBPW6sJCYcE';
 }
 
 </script>
+
+<style>
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+
+    /* Aplicamos la animación a los hijos para el efecto en cascada */
+    &>* {
+        opacity: 0;
+        /* Empiezan invisibles */
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+}
+</style>

@@ -10,7 +10,7 @@
                 :fondo="item.url" 
                 :title="item.name" 
                 :description="item.description"
-                :onclick="() => navigateTo(index)"
+                :onclick="() => navigateTo(item.id)"
                 class="card-rotate-item"/>
         </div>
     </div>
