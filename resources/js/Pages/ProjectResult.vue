@@ -148,14 +148,14 @@
         <Transition name="slide-up">
             <div 
                 v-if="selectPathologies.length > 0" 
-                class="flex flex-col w-full h-auto px-12 md:px-32 xl:px-52 mt-0 lg:mt-[100px]"
+                class="flex flex-col w-full h-auto px-12 md:px-32 xl:px-52 mt-0 lg:mt-[100px] mb-10"
                 ref="pathologiesSection"
                 >
                 <h1 class="text-2xl sm:text-4xl font-bold">Patologias</h1>
                 <span class="text-gray-600 text-sm sm:text-base">Detalles sobre las patologias pertenecientes a cada placa.</span>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 w-full h-auto gap-3 mt-10">
                     <img v-for="(item, index) in selectPathologies.slice(0,5)" :key="index"  :src="item.url_image" alt="" class="w-full object-cover aspect-square hover:scale-95 transition-transform duration-300 ease-in-out cursor-pointer rounded-2xl">    
-                    <div class="aspect-square flex flex-col items-center justify-center gap-y-4 cursor-pointer">
+                    <div v-if="selectPathologies.length > 6" class="aspect-square flex flex-col items-center justify-center gap-y-4 cursor-pointer">
                         <div class="flex items-center justify-center bg-gray-200 rounded-full aspect-square shadow-2xl">
                             <h1 class="font-bold text-6xl text-gray-700 m-10">+{{ selectPathologies.length - 5 }}</h1>
                         </div>
