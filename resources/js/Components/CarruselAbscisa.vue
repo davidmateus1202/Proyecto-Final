@@ -1,5 +1,5 @@
 <template>
-    <div class="relative h-[500px] w-full md:w-[500px] overflow-hidden rounded-3xl shadow-xl mb-10">
+    <div class="relative h-[500px] w-full lg:w-[500px] overflow-hidden rounded-3xl shadow-xl mb-10">
         <div class="absolute inset-0 z-0 overflow-hidden">
             <transition
                 :name="transitionName">

@@ -71,14 +71,14 @@
             </div>
         </div>
 
-        <div class="flex flex-col w-full h-auto items-center justify-start px-12 md:px-32 xl:px-52">
+        <div class="flex flex-col w-full h-auto items-center justify-start px-12 md:px-32 xl:px-52 mt-[130px] md:mt-0">
             <h1 class="text-2xl sm:text-4xl font-bold">Estadisticas del estudio</h1>
             <span class="text-gray-600 text-sm sm:text-base">Detalles del estudio con base en la recolección de datos
                 obtenidos.</span>
-            <div class="w-full flex flex-col lg:flex-row justify-center items-center my-10 gap-x-10">
+            <div class="flex flex-col lg:flex-row justify-center items-center my-10 gap-x-10 w-full">
                 <CarruselAbscisa @abscisaSelected="updateSlabsForAbscisa"
                     :data="projectStore.projectDetailsPublic.abscisas" />
-                <div ref="containersGrid" class="w-full md:w-1/2 h-full grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div ref="containersGrid" class="w-full lg:w-1/2 h-full grid grid-cols-1 gap-4 lg:grid-cols-2">
 
                     <div v-for="(slab, index) in containers" :key="slab.id" ref="containerRefs" :class="[
                         'group relative w-full h-[280px] rounded-2xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl p-5 flex flex-col justify-between overflow-hidden',
@@ -133,6 +133,7 @@
                             <!-- 3. Pie: Botón que aparece en Hover -->
                             <footer class="mt-auto">
                                 <button
+                                    @click="setNewPathologies(slab.pathologies)"
                                     class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0">
                                     Ver Detalles
                                 </button>
@@ -143,6 +144,27 @@
                 </div>
             </div>
         </div>
+
+        <Transition name="slide-up">
+            <div 
+                v-if="selectPathologies.length > 0" 
+                class="flex flex-col w-full h-auto px-12 md:px-32 xl:px-52 mt-0 lg:mt-[100px]"
+                ref="pathologiesSection"
+                >
+                <h1 class="text-2xl sm:text-4xl font-bold">Patologias</h1>
+                <span class="text-gray-600 text-sm sm:text-base">Detalles sobre las patologias pertenecientes a cada placa.</span>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 w-full h-auto gap-3 mt-10">
+                    <img v-for="(item, index) in selectPathologies.slice(0,5)" :key="index"  :src="item.url_image" alt="" class="w-full object-cover aspect-square hover:scale-95 transition-transform duration-300 ease-in-out cursor-pointer rounded-2xl">    
+                    <div class="aspect-square flex flex-col items-center justify-center gap-y-4 cursor-pointer">
+                        <div class="flex items-center justify-center bg-gray-200 rounded-full aspect-square shadow-2xl">
+                            <h1 class="font-bold text-6xl text-gray-700 m-10">+{{ selectPathologies.length - 5 }}</h1>
+                        </div>
+                        <span class="text-gray-700 font-semibold text-2xl">Resultados de patologias</span>
+                        <span class="text-gray-600 font-light text-sm">Da click aqui para ver mas resultados</span>
+                    </div>
+                </div>
+            </div>
+        </Transition>
     </div>
     <Error v-else />
     <Loading v-if="showLoadingScreen" :is-actually-loading="!allComponentsReady" />
@@ -153,7 +175,7 @@ import { IconChartCovariate } from '@tabler/icons-vue';
 import { IconCards } from '@tabler/icons-vue';
 import { IconAlertTriangle } from '@tabler/icons-vue';
 import CarruselAbscisa from '../Components/CarruselAbscisa.vue';
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import Loading from './Loading.vue';
 import { useProjectStore } from '../store/projectStore';
 import { useRoute } from 'vue-router';
@@ -172,6 +194,8 @@ const isAnimating = ref(false);
 const allComponentsReady = ref(false)
 const showLoadingScreen = ref(true)
 const fondoUrl = ref('');
+const selectPathologies = ref('');
+const pathologiesSection = ref(null)
 
 const FADE_OUT_DURATION_LOADING_ELEMENTS = 0.2;
 const EXPANSION_DURATION_LOADING = 0.7;
@@ -276,16 +300,27 @@ const handleData = async () => {
             countPatologias.value += slab.pathologies.length;
         })
     });
-
-    // const allSlabs = projectStore.projectDetailsPublic.abscisas.flatMap(item => item.slabs_with_pathologies);
-    // containers.value = allSlabs.map(slab => ({
-    //     ...slab,
-    //     animated: false
-    // }))
 }
 
 const setFallbackFondo = () => {
     fondoUrl.value = 'https://media.licdn.com/dms/image/v2/C5112AQEw1fXuabCTyQ/article-inline_image-shrink_1500_2232/article-inline_image-shrink_1500_2232/0/1581099611064?e=1762387200&v=beta&t=REpmuD079v2zeL6abmBTpKs3_aCCap9CjBPW6sJCYcE';
+}
+
+const setNewPathologies = async (pathologies) => {
+    selectPathologies.value = pathologies;
+
+    await nextTick();
+
+    if (pathologiesSection.value) {
+        const element = pathologiesSection.value;
+        const offset = 50;
+        const top = element.getBoundingClientRect().top + window.scrollY - offset;
+
+        window.scrollTo({
+            top,
+            behavior: "smooth"
+        })
+    }
 }
 
 </script>
@@ -312,4 +347,30 @@ const setFallbackFondo = () => {
         animation: fadeInUp 0.8s ease-out forwards;
     }
 }
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+    transition: all 0.4s ease;
+}
+
+.slide-up-enter-from {
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+.slide-up-enter-to {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.slide-up-leave-from {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.slide-up-leave-to {
+    opacity: 0;
+    transform: translateY(40px);
+}
+
 </style>
