@@ -80,7 +80,7 @@
                     :data="projectStore.projectDetailsPublic.abscisas" />
                 <div ref="containersGrid" class="w-full lg:w-1/2 h-full grid grid-cols-1 gap-4 lg:grid-cols-2">
 
-                    <div v-for="(slab, index) in containers" :key="slab.id" ref="containerRefs" :class="[
+                    <div v-for="(slab, index) in containers.slice(0, 4)" :key="slab.id" ref="containerRefs" :class="[
                         'group relative w-full h-[280px] rounded-2xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl p-5 flex flex-col justify-between overflow-hidden',
                         getContainerClasses(index) // Esto aplica su fondo degradado que ya tenía
                     ]">
@@ -165,7 +165,7 @@
                     </div>
 
                     <!-- Extra: botón "ver más" -->
-                    <div v-if="selectPathologies.length > 6"
+                    <div v-if="selectPathologies.length > 5"
                         class="aspect-square flex flex-col items-center justify-center gap-y-4 cursor-pointer">
                         <div class="flex items-center justify-center bg-gray-200 rounded-full aspect-square shadow-2xl">
                             <h1 class="font-bold text-6xl text-gray-700 m-10">+{{ selectPathologies.length - 5 }}</h1>
@@ -180,6 +180,7 @@
     </div>
     <Error v-else />
     <Loading v-if="showLoadingScreen" :is-actually-loading="!allComponentsReady" />
+    <ModalShowPathologies  v-if="showModal === true"/>
 </template>
 
 <script setup>
@@ -193,6 +194,7 @@ import { useProjectStore } from '../store/projectStore';
 import { useRoute } from 'vue-router';
 import Error from '../Error/Error.vue';
 import { IconRulerMeasure, IconMapPin, IconCalendar, IconShieldCheck } from '@tabler/icons-vue';
+import ModalShowPathologies from '../Components/ModalShowPathologies.vue';
 
 const projectStore = useProjectStore();
 const route = useRoute();
@@ -200,6 +202,7 @@ const countAbscisas = ref(0);
 const countPlacas = ref(0);
 const countPatologias = ref(0);
 const loadedImages = ref([]);
+const showModal = ref(true);
 
 const containerRefs = ref([]);
 const containersGrid = ref(null);
@@ -320,6 +323,7 @@ const setFallbackFondo = () => {
 }
 
 const setNewPathologies = async (pathologies) => {
+    loadedImages.value = [];
     selectPathologies.value = pathologies;
 
     await nextTick();
