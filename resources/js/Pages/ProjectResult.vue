@@ -132,8 +132,7 @@
 
                             <!-- 3. Pie: Botón que aparece en Hover -->
                             <footer class="mt-auto">
-                                <button
-                                    @click="setNewPathologies(slab.pathologies)"
+                                <button @click="setNewPathologies(slab.pathologies)"
                                     class="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0">
                                     Ver Detalles
                                 </button>
@@ -146,22 +145,35 @@
         </div>
 
         <Transition name="slide-up">
-            <div 
-                v-if="selectPathologies.length > 0" 
+            <div v-if="selectPathologies.length > 0"
                 class="flex flex-col w-full h-auto px-12 md:px-32 xl:px-52 mt-0 lg:mt-[100px] mb-10"
-                ref="pathologiesSection"
-                >
+                ref="pathologiesSection">
                 <h1 class="text-2xl sm:text-4xl font-bold">Patologias</h1>
-                <span class="text-gray-600 text-sm sm:text-base">Detalles sobre las patologias pertenecientes a cada placa.</span>
+                <span class="text-gray-600 text-sm sm:text-base">Detalles sobre las patologias pertenecientes a cada
+                    placa.</span>
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 w-full h-auto gap-3 mt-10">
-                    <img v-for="(item, index) in selectPathologies.slice(0,5)" :key="index"  :src="item.url_image" alt="" class="w-full object-cover aspect-square hover:scale-95 transition-transform duration-300 ease-in-out cursor-pointer rounded-2xl">    
-                    <div v-if="selectPathologies.length > 6" class="aspect-square flex flex-col items-center justify-center gap-y-4 cursor-pointer">
+                    <div v-for="(item, index) in selectPathologies.slice(0, 5)" :key="index"
+                        class="relative w-full aspect-square rounded-2xl overflow-hidden">
+                        <!-- Skeleton -->
+                        <div v-if="!loadedImages[index]" class="absolute inset-0 bg-gray-200 animate-pulse rounded-2xl">
+                        </div>
+
+                        <!-- Imagen -->
+                        <img :src="item.url_image" alt=""
+                            class="w-full h-full object-cover hover:scale-95 transition-transform duration-300 ease-in-out cursor-pointer rounded-2xl"
+                            @load="loadedImages[index] = true">
+                    </div>
+
+                    <!-- Extra: botón "ver más" -->
+                    <div v-if="selectPathologies.length > 6"
+                        class="aspect-square flex flex-col items-center justify-center gap-y-4 cursor-pointer">
                         <div class="flex items-center justify-center bg-gray-200 rounded-full aspect-square shadow-2xl">
                             <h1 class="font-bold text-6xl text-gray-700 m-10">+{{ selectPathologies.length - 5 }}</h1>
                         </div>
-                        <span class="text-gray-700 font-semibold text-2xl">Resultados de patologias</span>
-                        <span class="text-gray-600 font-light text-sm">Da click aqui para ver mas resultados</span>
+                        <span class="text-gray-700 font-semibold text-2xl">Resultados de patologías</span>
+                        <span class="text-gray-600 font-light text-sm">Da click aquí para ver más resultados</span>
                     </div>
+
                 </div>
             </div>
         </Transition>
@@ -187,6 +199,7 @@ const route = useRoute();
 const countAbscisas = ref(0);
 const countPlacas = ref(0);
 const countPatologias = ref(0);
+const loadedImages = ref([]);
 
 const containerRefs = ref([]);
 const containersGrid = ref(null);
@@ -372,5 +385,4 @@ const setNewPathologies = async (pathologies) => {
     opacity: 0;
     transform: translateY(40px);
 }
-
 </style>

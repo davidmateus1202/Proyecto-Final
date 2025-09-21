@@ -44,8 +44,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router'; // Importa useRouter si necesitas navegación
+import { ref, computed } from 'vue';
 import '../CSS/Carrusel.css';
 
 const props = defineProps({
@@ -56,27 +55,12 @@ const props = defineProps({
     },
 }); 
 
-const router = useRouter(); // Inicializa el router si necesitas navegación
 const currentIndex = ref(0);
-const intervalId = ref(null);
-const transitionDuration = 8000; // Duración del intervalo para cambio automático
-const animationDuration = 0.7; // Duración de la animación CSS en segundos
 
 const transitionName = ref('slide-right'); // Nombre de la transición (slide-left o slide-right)
 
 const currentImage = computed(() => props.data[currentIndex.value]);
 const emit = defineEmits(['abscisaSelected']);
-
-const resetInterval = () => {
-    if (intervalId.value) {
-        clearInterval(intervalId.value);
-    }
-    if (props.data.length > 1) {
-        intervalId.value = setInterval(() => {
-            nextImage();
-        }, transitionDuration);
-    }
-};
 
 // Función genérica para ir a una imagen, estableciendo la dirección de la transición
 const goToImage = (index, direction) => {
@@ -84,7 +68,6 @@ const goToImage = (index, direction) => {
 
     transitionName.value = direction;
     currentIndex.value = index;
-    resetInterval(); // Reiniciar el intervalo de autoplay después de un cambio manual
 };
 
 const nextImage = () => {
@@ -99,19 +82,6 @@ const prevImage = () => {
     goToImage(newIndex, 'slide-left');
 };
 
-onMounted(() => {
-    resetInterval(); // Iniciar el autoplay al montar el componente
-});
-
-onUnmounted(() => {
-    if (intervalId.value) {
-        clearInterval(intervalId.value);
-    }
-});
-
-const navigateTo = (path) => {
-    router.push({ path });
-}
 </script>
 
 <style>
