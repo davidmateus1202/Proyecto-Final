@@ -160,6 +160,7 @@
 
                         <!-- Imagen -->
                         <img :src="item.url_image" alt=""
+                            @click="toggleShowModal"
                             class="w-full h-full object-cover hover:scale-95 transition-transform duration-300 ease-in-out cursor-pointer rounded-2xl"
                             @load="loadedImages[index] = true">
                     </div>
@@ -180,7 +181,10 @@
     </div>
     <Error v-else />
     <Loading v-if="showLoadingScreen" :is-actually-loading="!allComponentsReady" />
-    <ModalShowPathologies  v-if="showModal === true"/>
+    <Teleport to="body">
+        <ModalShowPathologies v-if="showModal" @closeModal="closeModal" :pathologies="selectPathologies" />
+    </Teleport>
+
 </template>
 
 <script setup>
@@ -202,7 +206,7 @@ const countAbscisas = ref(0);
 const countPlacas = ref(0);
 const countPatologias = ref(0);
 const loadedImages = ref([]);
-const showModal = ref(true);
+const showModal = ref(false);
 
 const containerRefs = ref([]);
 const containersGrid = ref(null);
@@ -338,6 +342,14 @@ const setNewPathologies = async (pathologies) => {
             behavior: "smooth"
         })
     }
+}
+
+const toggleShowModal = () => {
+    showModal.value = !showModal.value
+}
+
+const closeModal = () => {
+  showModal.value = false
 }
 
 </script>
