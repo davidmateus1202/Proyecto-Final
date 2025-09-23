@@ -274,7 +274,6 @@ const updateSlabsForAbscisa = (index) => {
         // Si no hay placas, vaciamos el array
         containers.value = [];
     }
-
     // 4. Disparamos la animación para que las nuevas placas aparezcan de forma elegante
     handleCarouselClick();
 };
