@@ -181,10 +181,7 @@
     </div>
     <Error v-else />
     <Loading v-if="showLoadingScreen" :is-actually-loading="!allComponentsReady" />
-    <Teleport to="body">
-        <ModalShowPathologies v-if="showModal" @closeModal="closeModal" :pathologies="selectPathologies" />
-    </Teleport>
-
+    <ModalShowPathologies v-if="showModal" @closeModal="closeModal" :pathologies="selectPathologies" />
 </template>
 
 <script setup>
@@ -192,7 +189,7 @@ import { IconChartCovariate } from '@tabler/icons-vue';
 import { IconCards } from '@tabler/icons-vue';
 import { IconAlertTriangle } from '@tabler/icons-vue';
 import CarruselAbscisa from '../Components/CarruselAbscisa.vue';
-import { nextTick, onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref, watch, onUnmounted } from 'vue';
 import Loading from './Loading.vue';
 import { useProjectStore } from '../store/projectStore';
 import { useRoute } from 'vue-router';
@@ -350,6 +347,21 @@ const toggleShowModal = () => {
 const closeModal = () => {
   showModal.value = false
 }
+
+watch(showModal, (newValue) => {
+  if (newValue) {
+    // Cuando el modal se abre, deshabilita el scroll del body
+    document.body.style.overflow = 'hidden';
+  } else {
+    // Cuando el modal se cierra, restaura el scroll
+    document.body.style.overflow = '';
+  }
+});
+
+
+onUnmounted(() => {
+  document.body.style.overflow = '';
+});
 
 </script>
 

@@ -1,6 +1,6 @@
 <template>
     <!-- Contenedor de fondo y centrado -->
-    <div class="fixed inset-0 w-full h-full bg-black/50 z-20 flex justify-center items-center p-4">
+    <div class="fixed inset-0 w-full h-full bg-black/50 z-20 flex justify-center items-center p-4 overflow-hidden">
 
         <!-- Contenedor principal del modal -->
         <div class="relative flex flex-col lg:flex-row bg-white w-full max-w-6xl h-full max-h-[95vh] rounded-2xl shadow-2xl overflow-hidden overflow-y-auto lg:overflow-y-hidden">
