@@ -77,7 +77,7 @@
                             </td>
 
                             <td class="flex items-center justify-center">
-                                <button @click="toggleModalPhoto(pathology.url_image)"
+                                <button @click="toggleModal"
                                     class="flex w-8 h-8 bg-gray-100 items-center justify-center mb-5 rounded-full shadow-sm cursor-pointer hover:bg-gray-200">
                                     <i class="pi pi-angle-down"></i>
                                 </button>
@@ -108,7 +108,7 @@
 
                             <td class="text-center">
                             <div class="flex w-full h-full items-center justify-center">
-                                    <button @click="toggleModalPhoto(pathology.url_image)" class="flex w-8 h-8 bg-gray-100 items-center justify-center mb-5 rounded-full shadow-sm cursor-pointer hover:bg-gray-200">
+                                    <button @click="toggleModal" class="flex w-8 h-8 bg-gray-100 items-center justify-center mb-5 rounded-full shadow-sm cursor-pointer hover:bg-gray-200">
                                         <i class="pi pi-angle-down"></i>
                                     </button>
                             </div>
@@ -140,10 +140,7 @@
     <FilterDropdown v-if="showFilter" :position="position" @close="closeDropdown" />
     <AlertError v-if="isErrorMessage" class="absolute top-0 left-0 right-0 mx-auto w-96"/>
     <ModalGoogleMaps v-if="showMap" @close="toogleMap" />
-    <ModalPhoto v-if="showPhoto" :imageUrl="selectedImageUrl" @close="closePhotoModal" />
-
-
-
+    <ModalShowPathologies v-if="showModal" @closeModal="closeModal" :pathologies="projectStore.pathologies"/>
 </template>
 
 <script setup>
@@ -158,7 +155,7 @@ import icon8 from '../../assets/icon8.png';
 import icon9 from '../../assets/icon9.png';
 import AlertError from '../Alert/AlertError.vue';
 import ModalGoogleMaps from './ModalGoogleMaps.vue';
-import ModalPhoto from './ModalPhoto.vue';
+import ModalShowPathologies from '../ModalShowPathologies.vue';
 
 const projectStore = useProjectStore()
 const isLoading = ref(false);
@@ -168,17 +165,11 @@ const position = ref({ top: 0, left: 0 });
 const showFilter = ref(false);
 const isErrorMessage = ref(false);
 const showMap = ref(false);
-const showPhoto = ref(false);
+const showModal = ref(false);
 const selectedImageUrl = ref('');
 
-const toggleModalPhoto = (imageUrl) => {
-    selectedImageUrl.value = imageUrl;
-    showPhoto.value = !showPhoto.value;
-}
-
-const closePhotoModal = () => {
-    showPhoto.value = false;
-    selectedImageUrl.value = '';
+const toggleModal = ()=> {
+    showModal.value = !showModal.value;
 }
 
 onMounted(async () => {
@@ -241,6 +232,10 @@ const closeDropdown = () => {
 
 const toogleMap = () => {
     showMap.value = !showMap.value;
+}
+
+const closeModal = () => {
+    showModal.value = false;
 }
 
 onUnmounted(() => {
