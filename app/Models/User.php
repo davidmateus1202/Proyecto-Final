@@ -10,6 +10,22 @@ use Spatie\Permission\Traits\HasRoles;
 use Laravel\Sanctum\HasApiTokens;
 
 
+/**
+ * @OA\Schema(
+ *   schema="User",
+ *   type="object",
+ *   title="User",
+ *   description="Modelo de usuario del sistema",
+ *   required={"name", "email", "password"}
+ * )
+ *
+ * @OA\Property(property="id", type="integer", example=1, description="ID del usuario")
+ * @OA\Property(property="name", type="string", example="Juan Perez", description="Nombre del usuario")
+ * @OA\Property(property="email", type="string", format="email", example="juan@example.com", description="Correo electrónico")
+ * @OA\Property(property="email_verified_at", type="string", format="date-time", example="2025-09-23T10:00:00Z", description="Fecha de verificación de correo")
+ * @OA\Property(property="password", type="string", format="password", example="********", description="Contraseña del usuario")
+ * @OA\Property(property="remember_token", type="string", example="token123", description="Token de sesión")
+ */
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */

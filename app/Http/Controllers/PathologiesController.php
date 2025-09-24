@@ -10,6 +10,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Tag(
+    name: "Pathologies",
+    description: "Endpoints para la gestión de patologías y conceptos técnicos."
+)]
 class PathologiesController extends Controller
 {
     /**
@@ -17,6 +23,27 @@ class PathologiesController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    #[OA\Post(
+        path: "/api/pathology-concept/create",
+        summary: "Insertar concepto técnico de patología",
+        tags: ["Pathologies"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["name", "description", "url_image"],
+                properties: [
+                    new OA\Property(property: "name", type: "string", example: "Fisura"),
+                    new OA\Property(property: "description", type: "string", example: "Fisura longitudinal en la losa"),
+                    new OA\Property(property: "url_image", type: "string", format: "binary", description: "Imagen de referencia")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Concepto creado exitosamente"),
+            new OA\Response(response: 400, description: "Datos inválidos"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function createNewPathologyConcept(Request $request)
     {
         try {
@@ -55,6 +82,15 @@ class PathologiesController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    #[OA\Get(
+        path: "/api/pathology-concept",
+        summary: "Mostrar todos los conceptos técnicos de patologías",
+        tags: ["Pathologies"],
+        responses: [
+            new OA\Response(response: 200, description: "Lista de conceptos técnicos"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function showConcept(): JsonResponse
     {
         try {
@@ -78,6 +114,19 @@ class PathologiesController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    #[OA\Get(
+        path: "/api/pathology-concept/search",
+        summary: "Buscar conceptos técnicos de patologías",
+        tags: ["Pathologies"],
+        parameters: [
+            new OA\Parameter(name: "search", in: "query", required: true, description: "Texto de búsqueda", schema: new OA\Schema(type: "string"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Resultados de búsqueda"),
+            new OA\Response(response: 404, description: "No se encontraron resultados"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function search(Request $request): JsonResponse
     {
         try {
@@ -115,6 +164,36 @@ class PathologiesController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    #[OA\Post(
+        path: "/api/pathologies/create",
+        summary: "Crear nueva patología",
+        tags: ["Pathologies"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["slab_id", "name", "url_image", "long_damage", "type_long_damage", "width_damage", "type_width_damage", "repair_long", "type_repair_long", "repair_width", "type_repair_width", "type_damage"],
+                properties: [
+                    new OA\Property(property: "slab_id", type: "integer", example: 1),
+                    new OA\Property(property: "name", type: "string", example: "Fisura"),
+                    new OA\Property(property: "url_image", type: "string", format: "binary", description: "Imagen de la patología"),
+                    new OA\Property(property: "long_damage", type: "number", format: "float", example: 2.5),
+                    new OA\Property(property: "type_long_damage", type: "string", example: "m"),
+                    new OA\Property(property: "width_damage", type: "number", format: "float", example: 0.3),
+                    new OA\Property(property: "type_width_damage", type: "string", example: "cm"),
+                    new OA\Property(property: "repair_long", type: "number", format: "float", example: 2.0),
+                    new OA\Property(property: "type_repair_long", type: "string", example: "m"),
+                    new OA\Property(property: "repair_width", type: "number", format: "float", example: 0.2),
+                    new OA\Property(property: "type_repair_width", type: "string", example: "cm"),
+                    new OA\Property(property: "type_damage", type: "string", example: "Fisura")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Patología creada exitosamente"),
+            new OA\Response(response: 400, description: "Datos inválidos"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function create(Request $request) : JsonResponse
     {
         try {

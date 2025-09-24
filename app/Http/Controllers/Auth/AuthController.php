@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Tag(
+    name: "Auth",
+    description: "Endpoints para autenticación y gestión de tokens."
+)]
 class AuthController extends Controller
 {
     /**
@@ -16,6 +22,27 @@ class AuthController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    #[OA\Post(
+        path: "/api/auth/login",
+        summary: "Iniciar sesión de usuario",
+        tags: ["Auth"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["email", "password"],
+                properties: [
+                    new OA\Property(property: "email", type: "string", format: "email", example: "user@example.com"),
+                    new OA\Property(property: "password", type: "string", format: "password", example: "********")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Login exitoso"),
+            new OA\Response(response: 401, description: "No autorizado"),
+            new OA\Response(response: 422, description: "Error de validación"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function login(Request $request) : JsonResponse
     {
         $validate = Validator::make($request->all(), [
@@ -64,6 +91,16 @@ class AuthController extends Controller
      * Validate token
      * @return JsonResponse
      */
+    #[OA\Post(
+        path: "/api/auth/refresh-token",
+        summary: "Validar y refrescar token de usuario",
+        tags: ["Auth"],
+        responses: [
+            new OA\Response(response: 200, description: "Token refrescado exitosamente"),
+            new OA\Response(response: 401, description: "No autorizado"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function refreshToken() : JsonResponse
     {
         try {

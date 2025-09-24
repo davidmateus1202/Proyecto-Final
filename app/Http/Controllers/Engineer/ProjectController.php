@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\URL;
 use App\Models\Abscisa;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Tag(
+    name: "Projects",
+    description: "Endpoints para la gestión de proyectos."
+)]
 class ProjectController extends Controller
 {
     /**
@@ -20,6 +26,31 @@ class ProjectController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    #[OA\Post(
+        path: "/api/projects/create",
+        summary: "Crear un nuevo proyecto",
+        tags: ["Projects"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["name"],
+                properties: [
+                    new OA\Property(property: "name", type: "string", example: "Proyecto Vía Central"),
+                    new OA\Property(property: "description", type: "string", example: "Rehabilitación de vía principal"),
+                    new OA\Property(property: "image", type: "string", format: "binary", description: "Imagen del proyecto"),
+                    new OA\Property(property: "start_lat", type: "string", example: "4.60971"),
+                    new OA\Property(property: "start_lng", type: "string", example: "-74.08175"),
+                    new OA\Property(property: "end_lat", type: "string", example: "4.70000"),
+                    new OA\Property(property: "end_lng", type: "string", example: "-74.10000")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Proyecto creado exitosamente"),
+            new OA\Response(response: 400, description: "Datos inválidos"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function create(Request $request) : JsonResponse
     {
         $validated = Validator::make($request->all(), [
@@ -69,6 +100,15 @@ class ProjectController extends Controller
      * get all projects
      * @return JsonResponse
      */
+    #[OA\Get(
+        path: "/api/projects",
+        summary: "Obtener todos los proyectos del usuario autenticado",
+        tags: ["Projects"],
+        responses: [
+            new OA\Response(response: 200, description: "Lista de proyectos paginada"),
+            new OA\Response(response: 404, description: "No se encontraron proyectos")
+        ]
+    )]
     public function index() : JsonResponse
     {
         $user = Auth::user();
@@ -91,6 +131,19 @@ class ProjectController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    #[OA\Get(
+        path: "/api/projects/details",
+        summary: "Obtener detalles de un proyecto por ID",
+        tags: ["Projects"],
+        parameters: [
+            new OA\Parameter(name: "project_id", in: "query", required: true, description: "ID del proyecto", schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Detalles del proyecto"),
+            new OA\Response(response: 404, description: "Proyecto no encontrado"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function showDetails(Request $request) : JsonResponse
     {
         try {
@@ -131,6 +184,19 @@ class ProjectController extends Controller
      * @param request Request
      * @return JsonResponse
      */
+    #[OA\Get(
+        path: "/api/projects/{id}",
+        summary: "Obtener detalles de un proyecto por parámetro de ruta",
+        tags: ["Projects"],
+        parameters: [
+            new OA\Parameter(name: "id", in: "path", required: true, description: "ID del proyecto", schema: new OA\Schema(type: "integer"))
+        ],
+        responses: [
+            new OA\Response(response: 200, description: "Detalles del proyecto"),
+            new OA\Response(response: 404, description: "Proyecto no encontrado"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function showDetailsById(Request $request) : JsonResponse 
     {
         try {
@@ -156,6 +222,26 @@ class ProjectController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    #[OA\Post(
+        path: "/api/projects/collaborator/register",
+        summary: "Registrar un colaborador en un proyecto",
+        tags: ["Projects"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["project_id"],
+                properties: [
+                    new OA\Property(property: "project_id", type: "integer", example: 1)
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 201, description: "Colaborador registrado con éxito"),
+            new OA\Response(response: 400, description: "Datos inválidos"),
+            new OA\Response(response: 404, description: "Proyecto no encontrado"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function registerCollaborator(Request $request) : JsonResponse
     {
         $validated = Validator::make($request->all(), [
@@ -202,6 +288,15 @@ class ProjectController extends Controller
     /**
      * get all project
      */
+    #[OA\Get(
+        path: "/api/projects/all",
+        summary: "Obtener todos los proyectos (limitado)",
+        tags: ["Projects"],
+        responses: [
+            new OA\Response(response: 200, description: "Lista de proyectos"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function getAllProjects() : JsonResponse
     {
         try {

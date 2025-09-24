@@ -1,0 +1,1356 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API de Proyectos de Pavimento",
+        "description": "Documentación de la API para la gestión de proyectos, abscisas, losas y patologías. Creada para la aplicación móvil y web.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/abscisa": {
+            "get": {
+                "tags": [
+                    "Abscisas"
+                ],
+                "summary": "Obtener lista paginada de abscisas por proyecto",
+                "operationId": "401231738edccd7c098223b1506fecf8",
+                "parameters": [
+                    {
+                        "name": "project_id",
+                        "in": "query",
+                        "description": "ID del proyecto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Número de página",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "description": "Objeto de paginación de Laravel",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Abscisa"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros inválidos"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/abscisa/create": {
+            "post": {
+                "tags": [
+                    "Abscisas"
+                ],
+                "summary": "Crear una nueva abscisa",
+                "operationId": "15a0a23199a0916b02cddba83de192f3",
+                "requestBody": {
+                    "description": "Datos de la nueva abscisa",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "number_of_abscisas",
+                                    "project_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "K1+000 - K2+000"
+                                    },
+                                    "number_of_abscisas": {
+                                        "type": "integer",
+                                        "example": 100
+                                    },
+                                    "project_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Abscisa creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/Abscisa"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/abscisa/delete": {
+            "delete": {
+                "tags": [
+                    "Abscisas"
+                ],
+                "summary": "Eliminar una abscisa",
+                "operationId": "d794084aa0a93dd1352325ef9c11aaca",
+                "parameters": [
+                    {
+                        "name": "abscisa",
+                        "in": "path",
+                        "description": "ID de la abscisa a eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Abscisa eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Abscisa no encontrada"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/web/projects/show": {
+            "get": {
+                "tags": [
+                    "Abscisas",
+                    "Projects"
+                ],
+                "summary": "Obtener todas las abscisas de un proyecto con sus losas",
+                "operationId": "6a33a8833e35d8951d6d2488e80046f6",
+                "parameters": [
+                    {
+                        "name": "project_id",
+                        "in": "path",
+                        "description": "ID del proyecto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Abscisa"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error del servidor"
+                    }
+                }
+            }
+        },
+        "/api/abscisa/chart/show/{abscisa_id}": {
+            "get": {
+                "tags": [
+                    "Abscisas"
+                ],
+                "summary": "Obtener datos de patologías y daños para una abscisa",
+                "operationId": "8def88af18f042c0c20b60a13d55c1f4",
+                "parameters": [
+                    {
+                        "name": "abscisa",
+                        "in": "path",
+                        "description": "ID de la abscisa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Operación exitosa"
+                    },
+                    "404": {
+                        "description": "Abscisa no encontrada"
+                    },
+                    "500": {
+                        "description": "Error del servidor"
+                    }
+                }
+            }
+        },
+        "/api/abscisa/change/status": {
+            "patch": {
+                "tags": [
+                    "Abscisas"
+                ],
+                "summary": "Actualizar el estado de una abscisa",
+                "operationId": "d0b3208849258ac4d16fa6d04459687c",
+                "parameters": [
+                    {
+                        "name": "abscisa",
+                        "in": "path",
+                        "description": "ID de la abscisa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "description": "Nuevo estado de la abscisa",
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "in_progress",
+                                            "finished"
+                                        ],
+                                        "example": "finished"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Estado actualizado exitosamente"
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    },
+                    "404": {
+                        "description": "Abscisa no encontrada"
+                    },
+                    "401": {
+                        "description": "No autenticado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Iniciar sesión de usuario",
+                "description": "User Login",
+                "operationId": "535ffeda4b78916efd658b2844ea897a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "********"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login exitoso"
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    },
+                    "422": {
+                        "description": "Error de validación"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/auth/refresh-token": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Validar y refrescar token de usuario",
+                "description": "Validate token",
+                "operationId": "b80c298c154d95ff5615556099716e7f",
+                "responses": {
+                    "200": {
+                        "description": "Token refrescado exitosamente"
+                    },
+                    "401": {
+                        "description": "No autorizado"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/projects/create": {
+            "post": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Crear un nuevo proyecto",
+                "description": "create a new project",
+                "operationId": "e095ad0090afd79434a043704628ab0d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Proyecto Vía Central"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Rehabilitación de vía principal"
+                                    },
+                                    "image": {
+                                        "description": "Imagen del proyecto",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "start_lat": {
+                                        "type": "string",
+                                        "example": "4.60971"
+                                    },
+                                    "start_lng": {
+                                        "type": "string",
+                                        "example": "-74.08175"
+                                    },
+                                    "end_lat": {
+                                        "type": "string",
+                                        "example": "4.70000"
+                                    },
+                                    "end_lng": {
+                                        "type": "string",
+                                        "example": "-74.10000"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Proyecto creado exitosamente"
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/projects": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Obtener todos los proyectos del usuario autenticado",
+                "description": "get all projects",
+                "operationId": "5995c33f440f15317c83bd7ddc72f90d",
+                "responses": {
+                    "200": {
+                        "description": "Lista de proyectos paginada"
+                    },
+                    "404": {
+                        "description": "No se encontraron proyectos"
+                    }
+                }
+            }
+        },
+        "/api/projects/details": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Obtener detalles de un proyecto por ID",
+                "description": "get details project by id",
+                "operationId": "a84e2e09107e09ddec26b5b56d4e9769",
+                "parameters": [
+                    {
+                        "name": "project_id",
+                        "in": "query",
+                        "description": "ID del proyecto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles del proyecto"
+                    },
+                    "404": {
+                        "description": "Proyecto no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/projects/{id}": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Obtener detalles de un proyecto por parámetro de ruta",
+                "description": "get details project by id from route parameter",
+                "operationId": "2da628cf1021d0feb72651c8b0d05833",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del proyecto",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles del proyecto"
+                    },
+                    "404": {
+                        "description": "Proyecto no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/projects/collaborator/register": {
+            "post": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Registrar un colaborador en un proyecto",
+                "description": "register a new collaborator into a project",
+                "operationId": "556429227a1d29305dea2f2d7a8a2efc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "project_id"
+                                ],
+                                "properties": {
+                                    "project_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Colaborador registrado con éxito"
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    },
+                    "404": {
+                        "description": "Proyecto no encontrado"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/projects/all": {
+            "get": {
+                "tags": [
+                    "Projects"
+                ],
+                "summary": "Obtener todos los proyectos (limitado)",
+                "description": "get all project",
+                "operationId": "ba3d5c19a6cccacaa7d5b6d290ad5f1b",
+                "responses": {
+                    "200": {
+                        "description": "Lista de proyectos"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/model/ia": {
+            "post": {
+                "tags": [
+                    "Model"
+                ],
+                "summary": "Consultar el modelo de IA con una imagen",
+                "description": "Consulta el modelo de IA",
+                "operationId": "63914d2694fee6d8643d039064c0cd68",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "image"
+                                ],
+                                "properties": {
+                                    "image": {
+                                        "description": "Imagen para procesar en el modelo IA",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Respuesta del modelo IA"
+                    },
+                    "400": {
+                        "description": "Error de validación o imagen no válida"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/pathology-concept/create": {
+            "post": {
+                "tags": [
+                    "Pathologies"
+                ],
+                "summary": "Insertar concepto técnico de patología",
+                "description": "insertar conceptos tecnicos de patologias",
+                "operationId": "581014febe948aa3798223d66bdc1802",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "url_image"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Fisura"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Fisura longitudinal en la losa"
+                                    },
+                                    "url_image": {
+                                        "description": "Imagen de referencia",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Concepto creado exitosamente"
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/pathology-concept": {
+            "get": {
+                "tags": [
+                    "Pathologies"
+                ],
+                "summary": "Mostrar todos los conceptos técnicos de patologías",
+                "description": "Show concept pathology",
+                "operationId": "aa368856c1cb2543daf3d672d1a13044",
+                "responses": {
+                    "200": {
+                        "description": "Lista de conceptos técnicos"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/pathology-concept/search": {
+            "get": {
+                "tags": [
+                    "Pathologies"
+                ],
+                "summary": "Buscar conceptos técnicos de patologías",
+                "description": "Search pathologies",
+                "operationId": "deaf78f7679ac2d5ce89203a0ac0a2c5",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Texto de búsqueda",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resultados de búsqueda"
+                    },
+                    "404": {
+                        "description": "No se encontraron resultados"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/pathologies/create": {
+            "post": {
+                "tags": [
+                    "Pathologies"
+                ],
+                "summary": "Crear nueva patología",
+                "description": "Create new pathologie",
+                "operationId": "f94c4d8fba3e68934c66aa86e2b2742e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "slab_id",
+                                    "name",
+                                    "url_image",
+                                    "long_damage",
+                                    "type_long_damage",
+                                    "width_damage",
+                                    "type_width_damage",
+                                    "repair_long",
+                                    "type_repair_long",
+                                    "repair_width",
+                                    "type_repair_width",
+                                    "type_damage"
+                                ],
+                                "properties": {
+                                    "slab_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Fisura"
+                                    },
+                                    "url_image": {
+                                        "description": "Imagen de la patología",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "long_damage": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 2.5
+                                    },
+                                    "type_long_damage": {
+                                        "type": "string",
+                                        "example": "m"
+                                    },
+                                    "width_damage": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0.3
+                                    },
+                                    "type_width_damage": {
+                                        "type": "string",
+                                        "example": "cm"
+                                    },
+                                    "repair_long": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 2
+                                    },
+                                    "type_repair_long": {
+                                        "type": "string",
+                                        "example": "m"
+                                    },
+                                    "repair_width": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0.2
+                                    },
+                                    "type_repair_width": {
+                                        "type": "string",
+                                        "example": "cm"
+                                    },
+                                    "type_damage": {
+                                        "type": "string",
+                                        "example": "Fisura"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Patología creada exitosamente"
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    },
+                    "500": {
+                        "description": "Error interno"
+                    }
+                }
+            }
+        },
+        "/api/slabs/create": {
+            "post": {
+                "tags": [
+                    "Slabs"
+                ],
+                "summary": "Crear nueva losa",
+                "description": "Create new Slab",
+                "operationId": "daed5efeb63df25c1da3587ab54e0df3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "abscisa_id",
+                                    "long",
+                                    "width",
+                                    "type_long",
+                                    "type_width",
+                                    "latitude",
+                                    "longitude"
+                                ],
+                                "properties": {
+                                    "abscisa_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "long": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 5
+                                    },
+                                    "width": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 2.5
+                                    },
+                                    "type_long": {
+                                        "type": "string",
+                                        "example": "m"
+                                    },
+                                    "type_width": {
+                                        "type": "string",
+                                        "example": "m"
+                                    },
+                                    "latitude": {
+                                        "type": "string",
+                                        "example": "4.60971"
+                                    },
+                                    "longitude": {
+                                        "type": "string",
+                                        "example": "-74.08175"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Losa creada exitosamente"
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    }
+                }
+            }
+        },
+        "/api/slabs/{abscisa_id}": {
+            "get": {
+                "tags": [
+                    "Slabs"
+                ],
+                "summary": "Obtener todas las losas de una abscisa",
+                "description": "Get all Slabs",
+                "operationId": "fe4edbd932a760f0b43434de5068f90a",
+                "parameters": [
+                    {
+                        "name": "abscisa_id",
+                        "in": "path",
+                        "description": "ID de la abscisa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de losas"
+                    },
+                    "404": {
+                        "description": "No se encontraron losas"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Abscisa": {
+                "title": "Abscisa",
+                "description": "Modelo de Abscisa. Representa una sección o tramo específico dentro de un proyecto, el cual contiene múltiples losas (placas).",
+                "properties": {
+                    "id": {
+                        "description": "El ID único de la abscisa",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Nombre o identificador de la abscisa (ej. K0+000)",
+                        "type": "string",
+                        "example": "K0+000 - K1+000"
+                    },
+                    "number_of_abscisas": {
+                        "description": "Número de mediciones o sub-secciones dentro de este tramo",
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "project_id": {
+                        "description": "ID del proyecto al que pertenece",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "user_id": {
+                        "description": "ID del usuario que la registró",
+                        "type": "integer",
+                        "example": 12
+                    },
+                    "status": {
+                        "description": "Estado actual de la abscisa",
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "in_progress",
+                            "finished"
+                        ],
+                        "example": "pending"
+                    },
+                    "created_at": {
+                        "description": "Fecha y hora de creación",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-27T10:00:00Z"
+                    },
+                    "updated_at": {
+                        "description": "Fecha y hora de la última actualización",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2023-10-27T12:30:00Z"
+                    },
+                    "slabs": {
+                        "description": "Lista de losas (placas) asociadas a esta abscisa. Esta propiedad solo aparecerá si se carga la relación.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Slabs"
+                        }
+                    },
+                    "slabs_with_pathologies": {
+                        "description": "Lista de losas (placas) con sus patologías precargadas.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Slabs"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Pathologies": {
+                "title": "Pathologies",
+                "description": "Modelo de patologías de losas",
+                "required": [
+                    "slab_id",
+                    "name",
+                    "url_image",
+                    "long_damage",
+                    "type_long_damage",
+                    "width_damage",
+                    "type_width_damage",
+                    "repair_long",
+                    "type_repair_long",
+                    "repair_width",
+                    "type_repair_width",
+                    "type_damage"
+                ],
+                "properties": {
+                    "slab_id": {
+                        "description": "ID de la losa",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Nombre de la patología",
+                        "type": "string",
+                        "example": "Fisura"
+                    },
+                    "url_image": {
+                        "description": "URL de la imagen de la patología",
+                        "type": "string",
+                        "format": "url",
+                        "example": "https://ejemplo.com/imagen.jpg"
+                    },
+                    "long_damage": {
+                        "description": "Longitud del daño",
+                        "type": "number",
+                        "format": "float",
+                        "example": 2.5
+                    },
+                    "type_long_damage": {
+                        "description": "Unidad de longitud del daño",
+                        "type": "string",
+                        "example": "m"
+                    },
+                    "width_damage": {
+                        "description": "Ancho del daño",
+                        "type": "number",
+                        "format": "float",
+                        "example": 0.3
+                    },
+                    "type_width_damage": {
+                        "description": "Unidad de ancho del daño",
+                        "type": "string",
+                        "example": "cm"
+                    },
+                    "repair_long": {
+                        "description": "Longitud de la reparación",
+                        "type": "number",
+                        "format": "float",
+                        "example": 2
+                    },
+                    "type_repair_long": {
+                        "description": "Unidad de longitud de la reparación",
+                        "type": "string",
+                        "example": "m"
+                    },
+                    "repair_width": {
+                        "description": "Ancho de la reparación",
+                        "type": "number",
+                        "format": "float",
+                        "example": 0.2
+                    },
+                    "type_repair_width": {
+                        "description": "Unidad de ancho de la reparación",
+                        "type": "string",
+                        "example": "cm"
+                    },
+                    "type_damage": {
+                        "description": "Tipo de daño",
+                        "type": "string",
+                        "example": "Fisura"
+                    }
+                },
+                "type": "object"
+            },
+            "PathologyConcept": {
+                "title": "PathologyConcept",
+                "description": "Concepto de patología para losas",
+                "required": [
+                    "name",
+                    "description",
+                    "url_image"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID del concepto de patología",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Nombre del concepto de patología",
+                        "type": "string",
+                        "example": "Fisura"
+                    },
+                    "description": {
+                        "description": "Descripción del concepto",
+                        "type": "string",
+                        "example": "Fisura longitudinal en la losa"
+                    },
+                    "url_image": {
+                        "description": "URL de la imagen de referencia",
+                        "type": "string",
+                        "format": "url",
+                        "example": "https://ejemplo.com/imagen.jpg"
+                    }
+                },
+                "type": "object"
+            },
+            "Project": {
+                "title": "Project",
+                "description": "Modelo de proyecto de infraestructura",
+                "required": [
+                    "name",
+                    "description",
+                    "url",
+                    "start_lat",
+                    "start_lng",
+                    "end_lat",
+                    "end_lng",
+                    "status"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID del proyecto",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Nombre del proyecto",
+                        "type": "string",
+                        "example": "Proyecto Vía Central"
+                    },
+                    "description": {
+                        "description": "Descripción del proyecto",
+                        "type": "string",
+                        "example": "Rehabilitación de vía principal"
+                    },
+                    "url": {
+                        "description": "URL del proyecto",
+                        "type": "string",
+                        "format": "url",
+                        "example": "https://proyecto.com"
+                    },
+                    "start_lat": {
+                        "description": "Latitud inicial",
+                        "type": "string",
+                        "example": "4.60971"
+                    },
+                    "start_lng": {
+                        "description": "Longitud inicial",
+                        "type": "string",
+                        "example": "-74.08175"
+                    },
+                    "end_lat": {
+                        "description": "Latitud final",
+                        "type": "string",
+                        "example": "4.70000"
+                    },
+                    "end_lng": {
+                        "description": "Longitud final",
+                        "type": "string",
+                        "example": "-74.10000"
+                    },
+                    "status": {
+                        "description": "Estado del proyecto",
+                        "type": "string",
+                        "enum": [
+                            "pending",
+                            "in_progress",
+                            "finished"
+                        ],
+                        "example": "in_progress"
+                    }
+                },
+                "type": "object"
+            },
+            "Slabs": {
+                "title": "Slabs",
+                "description": "Modelo de losas de abscisa",
+                "required": [
+                    "abscisa_id",
+                    "long",
+                    "width",
+                    "type_long",
+                    "type_width",
+                    "latitude",
+                    "longitude"
+                ],
+                "properties": {
+                    "abscisa_id": {
+                        "description": "ID de la abscisa",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "long": {
+                        "description": "Longitud de la losa",
+                        "type": "number",
+                        "format": "float",
+                        "example": 5
+                    },
+                    "width": {
+                        "description": "Ancho de la losa",
+                        "type": "number",
+                        "format": "float",
+                        "example": 2.5
+                    },
+                    "type_long": {
+                        "description": "Unidad de longitud",
+                        "type": "string",
+                        "example": "m"
+                    },
+                    "type_width": {
+                        "description": "Unidad de ancho",
+                        "type": "string",
+                        "example": "m"
+                    },
+                    "latitude": {
+                        "description": "Latitud de la losa",
+                        "type": "string",
+                        "example": "4.60971"
+                    },
+                    "longitude": {
+                        "description": "Longitud de la losa",
+                        "type": "string",
+                        "example": "-74.08175"
+                    },
+                    "observation": {
+                        "description": "Observaciones de la losa",
+                        "type": "string",
+                        "example": "Sin observaciones"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "Modelo de usuario del sistema",
+                "required": [
+                    "name",
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID del usuario",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Nombre del usuario",
+                        "type": "string",
+                        "example": "Juan Perez"
+                    },
+                    "email": {
+                        "description": "Correo electrónico",
+                        "type": "string",
+                        "format": "email",
+                        "example": "juan@example.com"
+                    },
+                    "email_verified_at": {
+                        "description": "Fecha de verificación de correo",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-09-23T10:00:00Z"
+                    },
+                    "password": {
+                        "description": "Contraseña del usuario",
+                        "type": "string",
+                        "format": "password",
+                        "example": "********"
+                    },
+                    "remember_token": {
+                        "description": "Token de sesión",
+                        "type": "string",
+                        "example": "token123"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Autenticación por Bearer Token (Laravel Sanctum). Incluir el token en el header 'Authorization'.",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Abscisas",
+            "description": "Endpoints para la gestión de abscisas (tramos de proyecto)."
+        },
+        {
+            "name": "Auth",
+            "description": "Endpoints para autenticación y gestión de tokens."
+        },
+        {
+            "name": "Projects",
+            "description": "Endpoints para la gestión de proyectos."
+        },
+        {
+            "name": "Model",
+            "description": "Endpoints para la consulta y procesamiento del modelo de IA."
+        },
+        {
+            "name": "Pathologies",
+            "description": "Endpoints para la gestión de patologías y conceptos técnicos."
+        },
+        {
+            "name": "Slabs",
+            "description": "Endpoints para la gestión de losas (placas) de abscisas."
+        }
+    ]
+}

@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Tag(
+    name: "Model",
+    description: "Endpoints para la consulta y procesamiento del modelo de IA."
+)]
 class ModelController extends Controller
 {
     /**
@@ -15,6 +21,25 @@ class ModelController extends Controller
      *@param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    #[OA\Post(
+        path: "/api/model/ia",
+        summary: "Consultar el modelo de IA con una imagen",
+        tags: ["Model"],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ["image"],
+                properties: [
+                    new OA\Property(property: "image", type: "string", format: "binary", description: "Imagen para procesar en el modelo IA")
+                ]
+            )
+        ),
+        responses: [
+            new OA\Response(response: 200, description: "Respuesta del modelo IA"),
+            new OA\Response(response: 400, description: "Error de validación o imagen no válida"),
+            new OA\Response(response: 500, description: "Error interno")
+        ]
+    )]
     public function ia_model(Request $request) 
     {
         $validated = Validator::make($request->all(), [

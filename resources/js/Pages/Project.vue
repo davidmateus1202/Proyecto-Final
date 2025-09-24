@@ -2,7 +2,7 @@
     <div class="flex flex-col items-center justify-center w-full h-auto min-h-screen">
         <NavBar />
         <Header title="Proyectos"/>
-        <Section4 />
+        <Section5 />
         <Footer class="w-full" />
     </div>
 
@@ -12,7 +12,7 @@
 <script setup>
 import NavBar from '../Components/NavBar.vue';
 import Header from '../Components/Header.vue';
-import Section4 from '../Components/Section4.vue';
+import Section5 from '../Components/Section5.vue';
 import Footer from '../Components/Footer.vue';
 import Loading from './Loading.vue';
 import { ref, onMounted } from 'vue'
