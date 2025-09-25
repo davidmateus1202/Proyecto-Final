@@ -1,5 +1,6 @@
 <template>
-    <div class="flex flex-col items-center justify-center w-full h-auto min-h-screen overflow-x-hidden">
+    <div class="flex flex-col items-center justify-center w-full h-auto min-h-screen overflow-x-hidden
+    ">
         <NavBar />
         <Header title="Proyectos"/>
         <Section5 />
