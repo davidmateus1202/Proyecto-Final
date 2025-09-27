@@ -71,6 +71,7 @@ import { useAuthStore } from '../store/authStore';
 import { useProjectStore } from '../store/projectStore';
 import { onBeforeMount, ref } from 'vue';
 import icon4 from '../assets/icon4.png';
+import AlertDialog from '../Components/AlertDialog.vue';
 
 // variables
 const auth = useAuthStore();

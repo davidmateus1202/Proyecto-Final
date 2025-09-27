@@ -5,7 +5,7 @@
     ]">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <!-- Logo -->
-            <a href="#" @click.prevent="navigateTo('Home')" class="flex items-center space-x-3 rtl:space-x-reverse">
+            <a href="#" @click.prevent="navigateTo('Welcome')" class="flex items-center space-x-3 rtl:space-x-reverse">
                 <img :src="logo" class="h-12 mr-5" alt="Flowbite Logo"> <!-- Ajustado tamaño de logo y h-18 a h-16 o similar -->
             </a>
 
@@ -54,7 +54,7 @@
             <div class="flex flex-col w-full h-full justify-between p-5">
                 <!-- Cabecera del Drawer (Opcional, con logo y botón de cerrar) -->
                 <div class="flex justify-between items-center mb-6">
-                    <img :src="logo" class="h-14 mr-5" alt="Flowbite Logo">
+                    <img @click="navigateTo('Welcome')" :src="logo" class="h-14 mr-5" alt="Flowbite Logo">
                     <button @click="toggleMobileMenu" class="p-2 text-gray-600 hover:text-gray-800">
                         <span class="sr-only">Close menu</span>
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

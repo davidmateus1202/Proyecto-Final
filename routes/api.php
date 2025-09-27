@@ -46,7 +46,7 @@ Route::prefix('pathologie')->middleware('auth:sanctum')->group(function () {
 
 
 // Habilitar la ruta para crear conceptos técnicos de patologías
-// Route::post('/create-concept', [PathologiesController::class, 'createNewPathologyConcept']);
+Route::post('/create-concept', [PathologiesController::class, 'createNewPathologyConcept']);
 
 ///// -- API ROUTES FOR WEB -- /////
 Route::prefix('web')->middleware('auth:sanctum')->group(function () {

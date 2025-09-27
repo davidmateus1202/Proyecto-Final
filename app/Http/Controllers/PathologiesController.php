@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pathologies;
 use App\Models\PathologyConcept;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -194,38 +195,96 @@ class PathologiesController extends Controller
             new OA\Response(response: 500, description: "Error interno")
         ]
     )]
-    public function create(Request $request) : JsonResponse
+     public function create(Request $request): JsonResponse
     {
+        Log::info('Creating new pathology with request data: ', $request->all());
         try {
+            // Reglas de validación base para los campos requeridos
+            $rules = [
+                'slab_id' => 'required|integer',
+                'name' => 'required|string|max:255',
+                'long_damage' => 'required|numeric',
+                'type_long_damage' => 'required|string|max:255',
+                'width_damage' => 'required|numeric',
+                'type_width_damage' => 'required|string|max:255',
+                'repair_long' => 'required|numeric',
+                'type_repair_long' => 'required|string|max:255',
+                'repair_width' => 'required|numeric',
+                'type_repair_width' => 'required|string|max:255',
+                'type_damage' => 'required|string|max:255',
+            ];
 
-            $validated = Validator::make($request->all(), [
-                'slab_id' => 'required',
-                'name' => 'required',
-                'url_image' => 'required',
-                'long_damage' => 'required',
-                'type_long_damage' => 'required',
-                'width_damage' => 'required',
-                'type_width_damage' => 'required',
-                'repair_long' => 'required',
-                'type_repair_long' => 'required',
-                'repair_width' => 'required',
-                'type_repair_width' => 'required',
-                'type_damage' => 'required',
-            ]);
-    
+            // Validar condicionalmente 'image' o 'url_image'
+            // 'image' es opcional y debe ser un archivo de imagen si se envía.
+            // 'url_image' es requerido SÓLO si no se ha enviado un archivo 'image'.
+            // Esto asegura que siempre tendremos un valor para 'url_image'.
+            $rules['image'] = 'nullable|image|mimes:jpeg,png,jpg,gif';
+            $rules['url_image'] = 'required_without:image|nullable|string|max:2048'; // Es requerido si 'image' no está presente
+
+            $validated = Validator::make($request->all(), $rules);
+
             if ($validated->fails()) {
                 return response()->json(['error' => $validated->errors()], 400);
             }
-    
-            $pathologie = Pathologies::create($request->all());
-    
+
+            $finalImageUrl = null;
+
+            // Lógica para determinar la URL de la imagen
+            if ($request->hasFile('image')) {
+                // Si se sube una nueva imagen, procesarla y obtener su URL
+                $finalImageUrl = $this->uploadImage($request);
+                if (!$finalImageUrl) {
+                    // Si el proceso de subida falla (aunque uploadImage debería lanzar una excepción o retornar string)
+                    return response()->json(['message' => 'Error al subir la imagen.'], 500);
+                }
+            } else {
+                // Si no se sube una nueva imagen, usar la 'url_image' que viene en la petición
+                // Esta ya está validada como 'required_without:image'
+                $finalImageUrl = $request->input('url_image');
+            }
+
+            // Preparar los datos para la creación, excluyendo los campos de imagen originales
+            // que ya hemos procesado
+            $dataToCreate = $request->except(['image', 'url_image']);
+
+            // Añadir la URL final de la imagen a los datos
+            $dataToCreate['url_image'] = $finalImageUrl;
+
+            $pathologie = Pathologies::create($dataToCreate);
+
             return response()->json(['pathologie' => $pathologie], 201);
 
-        } catch (\Exception $e) {
+        } catch (\Exception $e) { // Usamos Exception genérica para capturar cualquier error
             return response()->json([
-                'message' => 'Error creating pathologie',
+                'message' => 'Error al crear la patología',
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Procesa la imagen subida, la almacena y retorna su URL pública.
+     *
+     * @param Request $request
+     * @return string|null La URL de la imagen o null si no se pudo subir.
+     */
+    private function uploadImage(Request $request): ?string
+    {
+        $url = null;
+
+        if ($request->hasFile('image')) {
+            // Guarda el archivo en el disco 'public' dentro de la carpeta 'pathologies'
+            $path = $request->file('image')->store('pathologies', 'public');
+            // Genera la URL pública para el archivo almacenado
+            $url = Storage::url($path);
+        }
+
+        // Si se obtuvo una URL relativa, convertirla a absoluta si es necesario
+        // URL::asset() genera una URL con el dominio base de la aplicación.
+        if ($url !== null) {
+            $url = URL::asset($url);
+        }
+
+        return $url;
     }
 }

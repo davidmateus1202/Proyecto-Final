@@ -29,7 +29,6 @@
 
 
     </div>
-
 </template>
 
 <script setup>
@@ -45,13 +44,11 @@ import { ref } from 'vue';
 const loading = ref(false);
 const route = useRouter();
 const auth = useAuthStore();
+const emit = defineEmits('logout');
 
 
 const logout = async () => {
-    loading.value = true;
-    await auth.logout();
-    route.push({ name: 'Login' });
-    loading.value = false;
+    emit('logout');
 }
 
 </script>

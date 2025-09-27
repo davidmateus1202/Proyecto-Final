@@ -40,15 +40,29 @@
               </p>
             </div>
 
-            <div class="mt-8 flex flex-col gap-4">
+            <form @submit.prevent="login" class="mt-8 flex flex-col gap-4">
 
-              <input type="email" id="Email" v-model="email" name="email" placeholder="Correo electrónico"
-                class="w-full border border-gray-200 rounded-3xl p-4 text-sm text-gray-700 shadow-xs focus:border-none outline-none" />
+              <input 
+                type="email" 
+                id="Email" 
+                v-model="email" 
+                name="email" 
+                placeholder="Correo electrónico"
+                class="w-full border border-gray-200 rounded-3xl p-4 text-sm text-gray-700 shadow-xs focus:border-none outline-none" 
+                required
+                />
 
-              <input type="password" id="Password" v-model="password" name="password" placeholder="Contraseña"
-                class="w-full border border-gray-200 rounded-3xl p-4 text-sm text-gray-700 shadow-xs focus:border-none outline-none" />
+              <input 
+                type="password" 
+                id="Password" 
+                v-model="password" 
+                name="password" 
+                placeholder="Contraseña"
+                class="w-full border border-gray-200 rounded-3xl p-4 text-sm text-gray-700 shadow-xs focus:border-none outline-none" 
+                required
+                />
 
-              <button @click="login"
+              <button type="submit"
                 class="inline-block h-12 lg:min-w-96 shrink-0 rounded-3xl border border-primary bg-primary px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-secondary focus:ring-3 focus:outline-hidden">
                 <i v-if="isLoading === true" class="pi pi-spin pi-spinner" style="font-size: 1.5rem"></i>
                 <span v-else="false">Iniciar sesión</span>
@@ -61,7 +75,7 @@
                   <a href="#" class="text-gray-700 underline">Registrate</a>.
                 </p>
               </div>
-            </div>
+            </form>
           </div>
         </main>
       </div>

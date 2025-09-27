@@ -178,6 +178,8 @@
                 </div>
             </div>
         </Transition>
+
+        <Footer class="w-full" />
     </div>
     <Error v-else />
     <Loading v-if="showLoadingScreen" :is-actually-loading="!allComponentsReady" />
@@ -196,6 +198,7 @@ import { useRoute } from 'vue-router';
 import Error from '../Error/Error.vue';
 import { IconRulerMeasure, IconMapPin, IconCalendar, IconShieldCheck } from '@tabler/icons-vue';
 import ModalShowPathologies from '../Components/ModalShowPathologies.vue';
+import Footer from '../Components/Footer.vue';
 
 const projectStore = useProjectStore();
 const route = useRoute();
