@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col w-full h-screen p-5 gap-y-5 overflow-hidden">
         <header class="flex w-full h-auto items-center justify-center">
-            <button v-if="isActivated === true" @click="activate" class="block lg:hidden hover:bg-primary rounded-3xl p-2 mr-1">
+            <button v-if="isActivated === true" @click="activate" class="flex lg:hidden hover:bg-primary rounded-full p-2 mr-1">
                 <i class="pi pi-chevron-right text-black rotate-180"></i>
             </button>
             <h1 class="text-secondary font-extrabold">DB</h1>
@@ -27,13 +27,13 @@
                 <!-- search -->
                  <div class="flex w-full rounded-3xl bg-gray-100 px-5 py-3 items-center gap-x-4">
                     <i class="pi pi-search text-gray-400"></i>
-                    <input class="w-full h-auto bg-transparent outline-none " type="text" placeholder="Buscar">
+                    <input class="w-full h-auto bg-transparent outline-none " type="text" placeholder="Buscar" v-model="searchTerm">
                  </div>
 
                  <h3 class="font-semibold text-gray-500">Proyectos</h3>
 
                  <!-- item by project -->
-                 <div @click="changeId(project.id)" v-if="projects.loading === false && projects.project.length !== 0" v-for="(project, index) in projects.project" :key="index" class="flex flex-col w-full h-auto rounded-3xl cursor-pointer">
+                 <div @click="changeId(project.id)" v-if="projects.loading === false && projects.project.length !== 0" v-for="(project, index) in filteredProjects" :key="index" class="flex flex-col w-full h-auto rounded-3xl cursor-pointer">
                     <img 
                     :src="project.url"
                     @error="event => event.target.src = 'https://edteam-media.s3.amazonaws.com/blogs/big/2ab53939-9b50-47dd-b56e-38d4ba3cc0f0.png'"
@@ -47,7 +47,7 @@
                     <span class="font-semibold text-gray-700">Cargando..</span>
                  </div>
 
-                 <div v-if="projects.project.length === 0 && projects.loading === false" class="flex flex-col w-full h-full items-center justify-center">
+                 <div v-if="filteredProjects.length === 0 && projects.loading === false" class="flex flex-col w-full h-full items-center justify-center">
                     <img :src="icon4" class="w-20 h-20 object-cover">
                     <h1 class="text-gray-800 font-semibold mt-3">No se encontraron resultados!</h1>
                     <span class="font-extralight text-xs text-gray-600">No tienes proyectos creados en este momento.</span>
@@ -69,7 +69,7 @@ import ProjectDetails from './ProjectDetails.vue';
 // data
 import { useAuthStore } from '../store/authStore';
 import { useProjectStore } from '../store/projectStore';
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, computed } from 'vue';
 import icon4 from '../assets/icon4.png';
 import AlertDialog from '../Components/AlertDialog.vue';
 
@@ -78,6 +78,8 @@ const auth = useAuthStore();
 const projects = useProjectStore();
 const isActivated = ref(false);
 const projectId = ref(null);
+const searchTerm = ref("");
+
 
 
 const activate = () => {
@@ -93,5 +95,12 @@ const changeId = (id) => {
     projectId.value = id
     projects.abscisaSelected = null;
 }
+
+const filteredProjects = computed(() => {
+  if (!searchTerm.value) return projects.project;
+  return projects.project.filter(project =>
+    project.name.toLowerCase().includes(searchTerm.value.toLowerCase())
+  );
+});
 
 </script>

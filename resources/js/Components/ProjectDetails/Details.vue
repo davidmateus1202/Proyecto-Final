@@ -29,8 +29,7 @@
                 <div class="flex items-center gap-x-2">
                     <h1 class="text-secondary font-bold">{{ projectStore.placaSelectedId !== null ? `Placa -
                         ${projectStore.placaSelectedId}` : 'Patologias detectadas' }}</h1>
-                    <div v-if="projectStore.placaSelectedId !== null"
-                        @click="toogleMap"
+                    <div v-if="projectStore.placaSelectedId !== null" @click="toogleMap"
                         class="flex bg-gray-100 w-8 h-8 rounded-full items-center justify-center shadow-sm cursor-pointer hover:bg-gray-200">
                         <i class="pi pi-map"></i>
                     </div>
@@ -38,12 +37,14 @@
                 <button ref="filterButton" @click="toggleFilterDropdown"
                     class="flex items-center gap-x-2 bg-gray-100 rounded-3xl px-5 py-2 shadow-sm hover:bg-gray-200">
                     <i class="pi pi-filter"></i>
-                    <h1>{{ projectStore.placaSelectedId !== null ? `Placa - ${projectStore.placaSelectedId}` : 'Filtros' }}</h1>
+                    <h1>{{ projectStore.placaSelectedId !== null ? `Placa - ${projectStore.placaSelectedId}` : 'Filtros'
+                        }}</h1>
                 </button>
             </div>
             <div class="w-full h-1 bg-gray-200 rounded-3xl shadow-md my-2"></div>
 
-            <div v-if="projectStore.pathologies.length > 0" class="hidden md:flex w-full h-auto items-center justify-center">
+            <div v-if="projectStore.pathologies.length > 0"
+                class="hidden md:flex flex-col w-full h-auto items-center justify-center">
                 <table class="w-full h-auto">
                     <thead>
                         <tr>
@@ -54,7 +55,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(pathology, index) in projectStore.pathologies" :key="index">
+                        <tr v-for="(pathology, index) in paginatedPathologies" :key="index">
                             <td class="flex h-auto p-3 justify-start gap-x-3">
                                 <img src="https://i.pinimg.com/736x/d9/6f/ea/d96fea5c1a36aada8b18340f626383a1.jpg"
                                     class="w-10 h-10 rounded-full" />
@@ -65,13 +66,15 @@
                             </td>
 
                             <td class="text-center">
-                                <span class="text-[12px] xl:text-[14px] font-semibold text-gray-500">{{ pathology.name }}</span>
+                                <span class="text-[12px] xl:text-[14px] font-semibold text-gray-500">{{ pathology.name
+                                    }}</span>
                             </td>
 
                             <td class="text-center">
                                 <div class="flex w-full h-full items-center justify-center">
                                     <div :class="{ [formattedDamageClass(pathology.type_damage)]: true }">
-                                        <span class="text-sm font-semibold">{{ formattedDamage(pathology.type_damage) }}</span>
+                                        <span class="text-sm font-semibold">{{ formattedDamage(pathology.type_damage)
+                                            }}</span>
                                     </div>
                                 </div>
                             </td>
@@ -85,9 +88,27 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <!-- Controles de paginación -->
+                <div class="flex items-center gap-4">
+                    <button @click="prevPage" :disabled="currentPage === 1"
+                        class="px-3 py-1 rounded bg-gray-200 text-sm disabled:opacity-50 cursor-pointer">
+                        <IconChevronCompactLeft stroke={2} />
+                    </button>
+
+                    <span class="text-sm text-gray-600">
+                        Página {{ currentPage }} de {{ totalPages }}
+                    </span>
+
+                    <button @click="nextPage" :disabled="currentPage === totalPages"
+                        class="px-3 py-1 rounded bg-gray-200 text-sm disabled:opacity-50 cursor-pointer">
+                        <IconChevronCompactRight stroke={2} />
+                    </button>
+                </div>
             </div>
 
-            <div v-if="projectStore.pathologies.length > 0" class="flex md:hidden w-full h-auto items-center justify-center">
+            <div v-if="projectStore.pathologies.length > 0"
+                class="flex flex-col md:hidden w-full h-auto items-center justify-center">
                 <table class="w-full h-auto mt-4">
                     <thead>
                         <tr>
@@ -96,7 +117,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(pathology, index) in projectStore.pathologies" :key="index">
+                        <tr v-for="(pathology, index) in paginatedPathologies" :key="index">
                             <td class="flex h-auto p-3 justify-start gap-x-3">
                                 <img src="https://i.pinimg.com/736x/d9/6f/ea/d96fea5c1a36aada8b18340f626383a1.jpg"
                                     class="w-10 h-10 rounded-full" />
@@ -107,15 +128,33 @@
                             </td>
 
                             <td class="text-center">
-                            <div class="flex w-full h-full items-center justify-center">
-                                    <button @click="toggleModal" class="flex w-8 h-8 bg-gray-100 items-center justify-center mb-5 rounded-full shadow-sm cursor-pointer hover:bg-gray-200">
+                                <div class="flex w-full h-full items-center justify-center">
+                                    <button @click="toggleModal"
+                                        class="flex w-8 h-8 bg-gray-100 items-center justify-center mb-5 rounded-full shadow-sm cursor-pointer hover:bg-gray-200">
                                         <i class="pi pi-angle-down"></i>
                                     </button>
-                            </div>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+
+                <!-- Controles de paginación -->
+                <div class="flex items-center gap-4">
+                    <button @click="prevPage" :disabled="currentPage === 1"
+                        class="px-3 py-1 rounded bg-gray-200 text-sm disabled:opacity-50 cursor-pointer">
+                        <IconChevronCompactLeft stroke={2} />
+                    </button>
+
+                    <span class="text-sm text-gray-600">
+                        Página {{ currentPage }} de {{ totalPages }}
+                    </span>
+
+                    <button @click="nextPage" :disabled="currentPage === totalPages"
+                        class="px-3 py-1 rounded bg-gray-200 text-sm disabled:opacity-50 cursor-pointer">
+                        <IconChevronCompactRight stroke={2} />
+                    </button>
+                </div>
             </div>
 
             <div v-if="projectStore.pathologies.length === 0" class="flex flex-col items-center justify-center mt-10">
@@ -125,7 +164,7 @@
                     seleccionada.</span>
 
             </div>
-            
+
         </div>
 
     </div>
@@ -138,16 +177,16 @@
 
     <!-- Dropdown or modals -->
     <FilterDropdown v-if="showFilter" :position="position" @close="closeDropdown" />
-    <AlertError v-if="isErrorMessage" class="absolute top-0 left-0 right-0 mx-auto w-96"/>
+    <AlertError v-if="isErrorMessage" class="absolute top-0 left-0 right-0 mx-auto w-96" />
     <ModalGoogleMaps v-if="showMap" @close="toogleMap" />
-    <ModalShowPathologies v-if="showModal" @closeModal="closeModal" :pathologies="projectStore.pathologies"/>
+    <ModalShowPathologies v-if="showModal" @closeModal="closeModal" :pathologies="projectStore.pathologies" />
 </template>
 
 <script setup>
 
 import GraficView from './GraficView.vue';
 import PieGraficView from './PieGraficView.vue';
-import { onMounted, ref, nextTick, onUnmounted } from 'vue';
+import { onMounted, ref, nextTick, onUnmounted, computed } from 'vue';
 import { useProjectStore } from '../../store/projectStore';
 import { useAuthStore } from '../../store/authStore';
 import FilterDropdown from './FilterDropdown.vue';
@@ -156,6 +195,7 @@ import icon9 from '../../assets/icon9.png';
 import AlertError from '../Alert/AlertError.vue';
 import ModalGoogleMaps from './ModalGoogleMaps.vue';
 import ModalShowPathologies from '../ModalShowPathologies.vue';
+import { IconChevronCompactLeft, IconChevronCompactRight  } from '@tabler/icons-vue';
 
 const projectStore = useProjectStore()
 const isLoading = ref(false);
@@ -168,9 +208,34 @@ const showMap = ref(false);
 const showModal = ref(false);
 const selectedImageUrl = ref('');
 
-const toggleModal = ()=> {
+const currentPage = ref(1);
+const itemsPerPage = ref(5);
+
+const toggleModal = () => {
     showModal.value = !showModal.value;
 }
+
+const totalPages = computed(() => {
+    return Math.ceil(projectStore.pathologies.length / itemsPerPage.value);
+});
+
+const paginatedPathologies = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value;
+    const end = start + itemsPerPage.value;
+    return projectStore.pathologies.slice(start, end);
+});
+
+const nextPage = () => {
+    if (currentPage.value < totalPages.value) {
+        currentPage.value++;
+    }
+};
+
+const prevPage = () => {
+    if (currentPage.value > 1) {
+        currentPage.value--;
+    }
+};
 
 onMounted(async () => {
     isLoading.value = true;

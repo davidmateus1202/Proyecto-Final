@@ -40,7 +40,7 @@
               </p>
             </div>
 
-            <form @submit.prevent="login" class="mt-8 flex flex-col gap-4">
+            <form @submit.prevent="checkLogin" class="mt-8 flex flex-col gap-4">
 
               <input 
                 type="email" 
@@ -79,9 +79,19 @@
           </div>
         </main>
       </div>
-      <AlertError v-if="isError" class="absolute top-0 left-0 right-0 mx-auto w-96" />
     </section>
   </div>
+  <AlertDialog
+    v-if="isError"
+    title="Error de autenticación"
+    message="Correo o contraseña incorrecta"
+    :buttonConfirmText="'Aceptar'"
+    :onConfirm="() => { isError = false }"
+    :show="false"
+  />
+
+  <Loading v-if="showLoadingScreen" :is-actually-loading="!allComponentsReady" />
+
 </template>
 
 <script setup>
@@ -92,6 +102,9 @@ import { useRouter } from "vue-router";
 import AlertError from '../Components/Alert/AlertError.vue';
 import fondo1 from '../assets/fondo1.webp';
 import NavBar from '../Components/NavBar.vue';
+import AlertDialog from '../Components/AlertDialog.vue';
+import Loading from './Loading.vue';
+import { all } from 'axios';
 
 const route = useRouter();
 
@@ -100,8 +113,26 @@ const email = ref('');
 const password = ref('');
 const isLoading = ref(false);
 const isError = ref(false);
+const allComponentsReady = ref(false)
+const showLoadingScreen = ref(false);
+
+const FADE_OUT_DURATION_LOADING_ELEMENTS = 0.2;
+const EXPANSION_DURATION_LOADING = 0.7;
 
 const auth = useAuthStore();
+
+const checkLogin = async () => {
+  showLoadingScreen.value = true;
+  allComponentsReady.value = false;
+
+  await login();
+
+  allComponentsReady.value = true;
+  const totalLoadingTransitionTime = FADE_OUT_DURATION_LOADING_ELEMENTS + EXPANSION_DURATION_LOADING;
+    setTimeout(() => {
+      showLoadingScreen.value = false;
+  }, (totalLoadingTransitionTime * 1000) + 100);
+}
 
 // methods
 const login = async () => {

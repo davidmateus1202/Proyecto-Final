@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 /**
  * @OA\Schema(
@@ -25,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Project extends Model
 {
+    use Searchable;
+
     protected $fillable = [
         'name',
         'description',
@@ -58,5 +61,13 @@ class Project extends Model
     {
         return $this->hasMany(Abscisa::class)
             ->with('slabsWithPathologies');
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'name' => $this->name,
+            'description' => $this->description,
+        ];
     }
 }
