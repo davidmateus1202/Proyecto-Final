@@ -33,7 +33,7 @@
                  <h3 class="font-semibold text-gray-500">Proyectos</h3>
 
                  <!-- item by project -->
-                 <div @click="changeId(project.id)" v-if="projects.loading === false && projects.project.length !== 0" v-for="(project, index) in filteredProjects" :key="index" class="flex flex-col w-full h-auto rounded-3xl cursor-pointer">
+                 <div @click="changeId(project)" v-if="projects.loading === false && projects.project.length !== 0" v-for="(project, index) in filteredProjects" :key="index" class="flex flex-col w-full h-auto rounded-3xl cursor-pointer">
                     <img 
                     :src="project.url"
                     @error="event => event.target.src = 'https://edteam-media.s3.amazonaws.com/blogs/big/2ab53939-9b50-47dd-b56e-38d4ba3cc0f0.png'"
@@ -90,9 +90,10 @@ onBeforeMount( async () => {
     await projects.getProjects();
 });
 
-const changeId = (id) => {
+const changeId = (project) => {
     isActivated.value = true;
-    projectId.value = id
+    projects.projectSelected = project;
+    projectId.value = project.id
     projects.abscisaSelected = null;
 }
 
