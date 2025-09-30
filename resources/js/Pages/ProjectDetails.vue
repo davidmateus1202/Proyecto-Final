@@ -11,9 +11,8 @@
 
         <!-- section de abscisas -->
         <OverlayScrollbarsComponent 
-            :options="{ scrollbars: { autoHide: 'leave', theme: 'os-theme-dark' } }"
-            class="w-full min-h-[160px] h-auto"
-        >
+            :options="overlayOptions"
+            class="w-full min-h-[160px] h-auto overflow-x-auto">
             <div v-if="projectStore.projectDetails.length > 0"
             class="flex flex-row flex-nowrap gap-x-6 p-2">
             <div v-for="(project, index) in projectStore.projectDetails" :key="project.id"
@@ -128,6 +127,17 @@ watch(() => props.projectId, (newVal, oldVal) => {
         getProjectDetails(newVal);
     }
 })
+
+const overlayOptions = {
+    overflow: {
+        x: 'hidden',
+        y: 'scroll'
+    },
+    scrollbars: {
+        autoHide: 'leave',
+        theme: 'os-theme-dark'
+    }
+}
 
 const getProjectDetails = async (val) => {
     await projectStore.getProjectDetails(val);
