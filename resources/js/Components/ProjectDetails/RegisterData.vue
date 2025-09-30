@@ -24,7 +24,7 @@
         <h3 class="text-xl font-bold text-gray-800 mb-5">Estadísticas Clave del Proyecto</h3>
 
         <!-- Sección de KPIs -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <div class="flex flex-col items-center p-5 bg-blue-50 rounded-lg shadow-sm">
                 <span class="text-4xl font-extrabold text-blue-700">{{ totalAbscisas }}</span>
                 <span class="text-base text-blue-600 mt-2">Total Abscisas</span>
@@ -36,10 +36,6 @@
             <div class="flex flex-col items-center p-5 bg-red-50 rounded-lg shadow-sm">
                 <span class="text-4xl font-extrabold text-red-700">{{ totalPatologias }}</span>
                 <span class="text-base text-red-600 mt-2">Total Patologías</span>
-            </div>
-            <div class="flex flex-col items-center p-5 bg-purple-50 rounded-lg shadow-sm">
-                <span class="text-4xl font-extrabold text-purple-700">{{ formatCurrency(costoTotalEstimado) }}</span>
-                <span class="text-base text-purple-600 mt-2">Costo Reparación Est.</span>
             </div>
         </div>
 
@@ -81,16 +77,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useProjectStore } from '../../store/projectStore'; // Ajusta la ruta
 
 const projectStore = useProjectStore();
 
-// --- Computed Properties para las Estadísticas Agregadas ---
-
-// Accede al proyecto seleccionado para el resumen general
-// Asegúrate de que `projectStore.projectSelected` se establezca correctamente al cargar el proyecto.
-// Por ejemplo, cuando se llama a `getProjectDetails`, también podrías establecer `projectStore.projectSelected`.
 
 const totalAbscisas = computed(() => projectStore.projectDetails.length);
 
@@ -112,30 +103,18 @@ const totalPatologias = computed(() => {
     return count;
 });
 
-const costoTotalEstimado = computed(() => {
-    let totalCost = 0;
-    projectStore.projectDetails.forEach(abscisa => {
-        abscisa.slabs_with_pathologies?.forEach(slab => {
-            slab.pathologies?.forEach(pathology => {
-                totalCost += pathology.repair_cost || 0;
-            });
-        });
-    });
-    return totalCost;
-});
-
 const patologiasPorSeveridad = computed(() => {
     const severityCounts = {
-        'Baja': 0,
-        'Media': 0,
-        'Alta': 0,
+        'low': 0,
+        'half': 0,
+        'high': 0,
         // Añade otras severidades si existen en tus datos
     };
     projectStore.projectDetails.forEach(abscisa => {
         abscisa.slabs_with_pathologies?.forEach(slab => {
             slab.pathologies?.forEach(pathology => {
-                if (severityCounts.hasOwnProperty(pathology.severity)) {
-                    severityCounts[pathology.severity]++;
+                if (severityCounts.hasOwnProperty(pathology.type_damage)) {
+                    severityCounts[pathology.type_damage]++;
                 }
             });
         });
@@ -164,6 +143,10 @@ const tiposPatologiasComunes = computed(() => {
     return sortedTypes.slice(0, 5); // Tomar los 5 tipos más comunes
 });
 
+onMounted(() => {
+    console.log('Project Details Loaded:', projectStore.projectDetails);
+})
+
 // --- Funciones de Formato ---
 
 const formatProjectStatus = (status) => {
@@ -172,15 +155,6 @@ const formatProjectStatus = (status) => {
         case 'finished': return 'Finalizado';
         default: return 'Desconocido';
     }
-};
-
-const formatCurrency = (value) => {
-    return new Intl.NumberFormat('es-CO', { // Ajusta el locale si es necesario
-        style: 'currency',
-        currency: 'COP', // Ajusta la moneda si es necesario
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(value);
 };
 
 const getSeverityColorClass = (severity) => {
@@ -193,7 +167,3 @@ const getSeverityColorClass = (severity) => {
 };
 
 </script>
-
-<style scoped>
-/* Puedes añadir estilos adicionales aquí si no usas Tailwind para todo */
-</style>
