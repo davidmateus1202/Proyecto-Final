@@ -52,7 +52,6 @@ export const useProjectStore = defineStore('project', {
             try {
                 const response = await axios.get('/api/list/projects')
                 if (response.status === 200) {
-                    console.log(response.data);
                     return response.data;
                 }
             } catch (e) {
@@ -93,7 +92,6 @@ export const useProjectStore = defineStore('project', {
                 const response = await axios.get(`/api/project/show/${id}`);
                 if (response.status === 200) {
                     this.projectDetailsPublic = response.data;
-                    console.log(this.projectDetailsPublic);
                 }
             } catch (error) {
                 console.log(error);

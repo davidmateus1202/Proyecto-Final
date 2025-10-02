@@ -34,16 +34,13 @@ const EXPANSION_DURATION_LOADING = 0.7;
 onMounted(async () => {
     showLoadingScreen.value = true;
     allComponentsReady.value = false;
-    console.log("HomePage: Montado, iniciando carga simulada...");
     await new Promise(resolve => setTimeout(resolve, 3500));
 
-    console.log("HomePage: Carga de componentes/datos terminada.");
-    allComponentsReady.value = true; 
+    allComponentsReady.value = true;
 
     const totalLoadingTransitionTime = FADE_OUT_DURATION_LOADING_ELEMENTS + EXPANSION_DURATION_LOADING;
 
     setTimeout(() => {
-        console.log("HomePage: Ocultando pantalla de carga.");
         showLoadingScreen.value = false; // Desmonta Loading.vue y muestra el contenido
     }, (totalLoadingTransitionTime * 1000) + 100); // Multiplicar por 1000 para ms y añadir un pequeño buffer (100ms)
 });

@@ -240,7 +240,6 @@ const prevPage = () => {
 onMounted(async () => {
     isLoading.value = true;
     await projectStore.getChartAbscisaDetails(projectStore.abscisaSelected.id);
-    console.log(projectStore.abscisaSelected);
     if (projectStore.abscisaSelected.slabs_with_pathologies.length > 0) {
         projectStore.setPlacaSelectedId(projectStore.abscisaSelected.slabs_with_pathologies[0].id);
     } else {
@@ -278,8 +277,6 @@ const toggleFilterDropdown = async () => {
                 left: positionValue.left + window.scrollX - 150
             };
             showFilter.value = !showFilter.value;
-        } else {
-            console.log("El botón de filtro no está visible");
         }
     });
 };

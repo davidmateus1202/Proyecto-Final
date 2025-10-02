@@ -158,10 +158,6 @@ const tiposPatologiasComunes = computed(() => {
     return sortedTypes.slice(0, 5); // Tomar los 5 tipos más comunes
 });
 
-onMounted(() => {
-    console.log('Project Details Loaded:', projectStore.projectDetails);
-})
-
 // --- Funciones de Formato ---
 
 const formatProjectStatus = (status) => {

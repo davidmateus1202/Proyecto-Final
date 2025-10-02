@@ -29,7 +29,6 @@ import { defineStore } from "pinia";
 
             } catch (error) {
                 if (error.status === 401) {
-                    console.log('Unauthorized');
                     return false;
                 }
 
