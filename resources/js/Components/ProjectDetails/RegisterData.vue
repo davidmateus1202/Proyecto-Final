@@ -40,7 +40,7 @@
         </div>
 
         <!-- Gráficos de Resumen -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <h4 class="text-lg font-semibold text-gray-800 mb-4">Distribución de Patologías por Severidad</h4>
                 <!-- Aquí puedes integrar un gráfico circular (Chart.js, ApexCharts, etc.) -->
@@ -49,12 +49,7 @@
                 </div>
                 <div v-else class="h-48 flex items-center justify-center">
                     <!-- Ejemplo de un "gráfico" muy básico con CSS para visualización -->
-                    <div class="flex flex-col gap-2">
-                        <div v-for="(count, severity) in patologiasPorSeveridad" :key="severity" class="flex items-center">
-                            <span :class="getSeverityColorClass(severity)" class="w-4 h-4 rounded-full mr-2"></span>
-                            <span class="text-sm text-gray-700">{{ severity }}: <span class="font-bold">{{ count }} ({{ ((count / totalPatologias) * 100).toFixed(1) }}%)</span></span>
-                        </div>
-                    </div>
+                    <PieGraficSeverity :severityData="patologiasPorSeveridad" />
                 </div>
             </div>
 
@@ -71,7 +66,15 @@
             </div>
         </div>
 
-        <!-- Puedes añadir más secciones como un "timeline" de progreso, o un mapa general si aplica -->
+        <h3 class="text-xl font-bold text-gray-800">Ruta del proyecto</h3>
+        <span class="text-gray-400 mb-5">En el mapa podras visualizar la ruta del proyecto.</span>
+        <GooglePath
+            v-if="lastSlab"
+            :initialLatitude="parseFloat(projectStore.projectDetails[0].slabs_with_pathologies[0].latitude)"
+            :initialLongitude="parseFloat(projectStore.projectDetails[0].slabs_with_pathologies[0].longitude)"
+            :destinationLatitude="parseFloat(lastSlab.latitude)"
+            :destinationLongitude="parseFloat(lastSlab.longitude)"
+        />
 
     </div>
 </template>
@@ -79,8 +82,20 @@
 <script setup>
 import { computed, onMounted } from 'vue';
 import { useProjectStore } from '../../store/projectStore'; // Ajusta la ruta
+import PieGraficSeverity from './PieGraficSeverity.vue';
+import GooglePath from '../GooglePath.vue';
 
 const projectStore = useProjectStore();
+const lastSlab = computed(() => {
+    if (projectStore.projectDetails && projectStore.projectDetails.length > 0) {
+        const lastAbscisa = projectStore.projectDetails[projectStore.projectDetails.length - 1];
+
+        if (lastAbscisa.slabs_with_pathologies && lastAbscisa.slabs_with_pathologies.length > 0) {
+            return lastAbscisa.slabs_with_pathologies[lastAbscisa.slabs_with_pathologies.length - 1];
+        }
+    }
+    return null;
+})
 
 
 const totalAbscisas = computed(() => projectStore.projectDetails.length);

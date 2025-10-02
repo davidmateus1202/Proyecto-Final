@@ -173,8 +173,4 @@ const selectView = computed(() => {
     }
 })
 
-onMounted(() => {
-    console.log(projectStore.projectDetails);
-})
-
 </script>
