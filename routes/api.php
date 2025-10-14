@@ -69,3 +69,5 @@ Route::middleware('auth:sanctum')->get('/logout', function () {
         'status' => 'success'
     ], 200);
 });
+
+Route::get('/projects/{id}/export', [ProjectController::class, 'exportExcelByProjectId']);

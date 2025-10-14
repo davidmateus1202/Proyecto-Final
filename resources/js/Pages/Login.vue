@@ -104,7 +104,6 @@ import fondo1 from '../assets/fondo1.webp';
 import NavBar from '../Components/NavBar.vue';
 import AlertDialog from '../Components/AlertDialog.vue';
 import Loading from './Loading.vue';
-import { all } from 'axios';
 
 const route = useRouter();
 
@@ -139,24 +138,10 @@ const login = async () => {
   if (email.value && password.value) {
     isLoading.value = true;
     const response = await auth.login(email.value, password.value);
-    if (response === false) {
-      isError.value = true;
-      setTimeout(() => {
-        isError.value = false;
-      }, 3000);
-      isLoading.value = false;
-      return;
-    }
-    isLoading.value = false;
     if (response) {
       route.push({ name: 'Home' });
       auth.authUser = true;
     }
-  } else {
-    isError.value = true;
-    setTimeout(() => {
-      isError.value = false;
-    }, 3000);
   }
 }
 
